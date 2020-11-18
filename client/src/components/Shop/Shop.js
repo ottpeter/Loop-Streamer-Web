@@ -17,9 +17,9 @@ export default function Shop() {
         id="welcome"
         defaultMessage="Welcome!"
       />
-      <BuyButton label="buy_small" text="Buy Small" />
-      <BuyButton label="buy_medium" text="Buy Medium" />
-      <BuyButton label="buy_large" text="Buy Large" />
+      <BuyButton label="buy_small" text="Buy Small" id="0" />
+      <BuyButton label="buy_medium" text="Buy Medium" id="1" />
+      <BuyButton label="buy_large" text="Buy Large" id="2" />
       <Footer />
     </div>
   )

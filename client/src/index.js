@@ -2,31 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import { INIT } from './actions/actions';
+import shopReducer from './reducers/shopReducer';
+import boardReducer from './reducers/boardReducer';
+import {  } from './actions/shopActions';
+import {  } from './actions/boardActions';
 import thunk from 'redux-thunk';
 import reportWebVitals from './reportWebVitals';
 
-const initialState = {
-  init: null,
-  isLoggedIn: false,
-  serverError: false,
-  username: "_not_set_",
-}
 
-const reducer = function (state = initialState, action) {
-  switch (action.type) {
-    case INIT:
-      return {
-        ...state,
-        init: "init"
-      };
-
-      default:
-        return state;
-  }
-}
+const reducer = combineReducers({
+  shop: shopReducer,
+  board: boardReducer
+});
 
 let store = createStore(reducer, applyMiddleware(thunk));
 
