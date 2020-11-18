@@ -1,14 +1,21 @@
 /* Colours*/
 :root {
   --shopMain: #000066;
-  --shopBackground: #8888FF;
+  --shopBackground: #CCCCFF;
   --shopActive: #EEEE00;
   --shopHover: #AA0000;
-  --shopHoverBackground: 
+  --shopHoverBackground: #EEEEEE;
+  --shopWhite: #EEEEEE;
 }
 
+/*html,body {
+  height: 100% !important;
+}*/
 .shopMain {
   background-color: var(--shopBackground);
+  height: 100vh;
+  text-align: center;
+  margin: auto;
 }
 
 .shopNav {
@@ -19,8 +26,11 @@
 
 .shopFooter {
   background-color: var(--shopMain);
+  width: 100%;
   position: fixed;
   bottom: 0;
+  height: 20vh;
+  color: var(--shopWhite);
 }
 
 .buyButton {
@@ -33,4 +43,43 @@
 }
 .buyButton:hover {
   color: var(--shopHover);
+}
+
+.detailsGrid {
+  width: 100%;
+  height: 100%;
+  margin: 2.5em;
+}
+
+.detailsGrid-left {
+  width: 30%;
+}
+
+.detailsGrid-right {
+  width: 70%;
+}
+
+.detailsGrid-name {
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+}
+
+.detailsGrid-goBack {
+  text-decoration: none;
+  padding: 1.1em;
+  margin: 1.1em;
+  background: var(--shopWhite);
+  color: var(--shopMain);
+  border: none;
+  width: 45%;
+}
+
+.detailsGrid-Buy {
+  text-decoration: none;
+  padding: 1.1em;
+  margin: 1.1em;
+  background: var(--shopActive);
+  color: var(--shopMain);
+  border: none;
+  width: 45%;
 }

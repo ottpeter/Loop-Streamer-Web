@@ -10,6 +10,7 @@ import Account from './components/Board/Account';
 import Settings from './components/Board/Settings';
 import Login from './components/Board/Login';
 import Default from './components/Default';
+import { init } from './actions/shopActions';
 import { IntlProvider, FormattedMessage, FormattedNumber } from 'react-intl';       // Localization
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -20,6 +21,12 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 const hunLabels = require('./languages/Hungarian.json');
 
 class App extends React.Component {
+
+  // Init
+  componentDidMount() {
+    this.props.dispatch(init());
+  }
+
   render() {
     return (
       <div className="App">

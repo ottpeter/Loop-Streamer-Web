@@ -13,7 +13,7 @@ const shopReducer = function (state = initialState, action) {
       return {
         ...state,
         init: "init",
-        products: require('../products.json'),
+        products: require('../products.json').products,
       };
 
     case SELECT:
