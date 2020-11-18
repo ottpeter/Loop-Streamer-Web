@@ -1,38 +1,36 @@
-.App {
-  text-align: center;
+/* Colours*/
+:root {
+  --shopMain: #000066;
+  --shopBackground: #8888FF;
+  --shopActive: #EEEE00;
+  --shopHover: #AA0000;
+  --shopHoverBackground: 
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.shopMain {
+  background-color: var(--shopBackground);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.shopNav {
+  background-color: var(--shopMain);
+  position: fixed;
+  top: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.shopFooter {
+  background-color: var(--shopMain);
+  position: fixed;
+  bottom: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.buyButton {
+  text-decoration: none;
+  padding: 1.1em;
+  margin: 1.1em;
+  background: var(--shopMain);
+  color: var(--shopActive);
+  border: none;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.buyButton:hover {
+  color: var(--shopHover);
 }
