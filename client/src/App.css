@@ -6,6 +6,8 @@
   --shopHover: #AA0000;
   --shopHoverBackground: #EEEEEE;
   --shopWhite: #EEEEEE;
+  --paymentGreen: #00EE00;
+  --paymentRed: #EE0000;
 }
 
 /*html,body {
@@ -82,4 +84,28 @@
   color: var(--shopMain);
   border: none;
   width: 45%;
+}
+
+.paymentSuccess {
+  background: var(--paymentGreen);
+  height: 5em;
+}
+
+.paymentFailed {
+  background: var(--paymentRed);
+  height: 5em;
+}
+
+.userinputGrid {
+  display: flex;
+}
+
+.userinputGrid-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.userinputGrid-right {
+  display: flex;
+  flex-direction: column;
 }

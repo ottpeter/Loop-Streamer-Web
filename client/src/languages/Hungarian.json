@@ -11,5 +11,8 @@
   "about_text": "Látjátuk feleim szümtükhel, mik vogymuk: isȧ, por ës homou vogymuk. Mënyi milosztben terömtevé elevé miü isëmüköt Ádámot, ës aduttȧ valá neki pȧrȧdicsumot hȧzoá. Ës mënd pȧrȧdicsumben valou gyimilcsëktűl mondá neki élnië. Hëon tilutoá űt igy fá gyimilcsétűl. Gye mondoá neki, mérët nüm ënëik : isȧ, ki napon ëmdöl az gyimilcstűl, hȧlálnek hȧláláȧl holsz. Hȧdlȧvá holtát terömtevé Istentűl, gye feledevé. Engedé ürdüng intetüinek, ës ëvék az tilvot gyimilcstűl. Ës az gyimilcsben hȧlálut evék. Ës az gyimilcsnek úl keseröü valá vizë, hugy turkokȧt migé szakasztja valá. Nüm hëon mogánek, gye mënd ű fajánek hȧlálut ëvék. Haraguvék Isten, ës vetevé űt ez munkás világ belé: és lëün hȧlálnek ës pukulnek fëszë, ës mënd ű nemének. Kik azok? Miü vogymuk. Hugy ës tiü látjátuk szümtükhel: isȧ, ës nüm igy embër múlhatjȧ ez vermöt, isȧ mënd azhuz járou vogymuk. Vimádjuk Uromk Isten këgyilmét ez lélekért, hugy jorgasson ű neki, ës kegyigy-gyën, ës bulcsássȧ mënd ű bűnét!",
   "404": "404 - Az oldal nem található.",
   "go_back": "Vissza",
-  "buy": "Megvásárolom"
+  "buy": "Megvásárolom",
+  "SUCCESS": "A fizetés sikeres volt. Hamarosan küldeni fogunk egy e-mailt a belépési adatokkal. Köszönjük vásárlását!",
+  "CANCELLED": "A fizetés vissza lett vonva.",
+  "ERROR": "A fizetés sikertelen volt."
 }

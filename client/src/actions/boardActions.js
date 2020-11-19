@@ -1,4 +1,4 @@
-import { LOGIN, NEW_UPLOAD, PROGRESS } from './actionNames';
+import { LOGIN, LOGOUT, NEW_UPLOAD, PROGRESS } from './actionNames';
 // Server URL is stored in .env
 require('dotenv').config();
 

@@ -13,3 +13,6 @@ export const PROGRESS = "PROGRESS";             // Progress change
 
 /** For the Shop */
 export const SELECT = "SELECT";
+export const SET_PAYMENT_STATUS = "SET_PAYMENT_STATUS";
+export const SET_EMAIL = "SET_EMAIL";
+export const SET_EMAIL_AGAIN = "SET_EMAIL_AGAIN";

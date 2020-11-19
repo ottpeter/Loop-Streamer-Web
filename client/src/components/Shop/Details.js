@@ -4,7 +4,6 @@ import Footer from './Footer';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from "react-router-dom";
-import { selectProduct } from '../../actions/shopActions';
 
 function Details ({selectedProduct, products}) {
   const history = useHistory();
@@ -14,7 +13,7 @@ function Details ({selectedProduct, products}) {
   }
 
   function buy() {
-    history.push('/Checkout');
+    history.push('/userinput');
   }
 
   return (

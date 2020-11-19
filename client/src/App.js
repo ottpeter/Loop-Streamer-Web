@@ -5,6 +5,7 @@ import About from './components/Shop/About';
 import Details from './components/Shop/Details';
 import Checkout from './components/Shop/Checkout';
 import Done from './components/Shop/Done';
+import UserInput from './components/Shop/UserInput';
 import MainBoard from './components/Board';
 import Account from './components/Board/Account';
 import Settings from './components/Board/Settings';
@@ -56,6 +57,9 @@ class App extends React.Component {
 
               {/** Notification about payment */}
               <Route exact path="/done" render={() => <Done />} />
+
+              {/** User Data */}
+              <Route exact path="/userinput" component={UserInput} />
 
               {/** Managment Board Main */}
               <Route exact path="/board" render={props => this.props.isLoggedIn ? (
