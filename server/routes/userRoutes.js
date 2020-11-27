@@ -41,3 +41,5 @@ router.post('/init', async (req,res) => {
 });
 
 /** ... */
+
+module.exports = router;

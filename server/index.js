@@ -23,6 +23,10 @@ app.use('/users', require('./routes/userRoutes'));
 
 /** ...  */
 
+// PayPal routes
+  //test only
+  app.use('/paypaltest', require('./routes/paypalTest'));
+
 
 var httpsServer = https.createServer(credentials, app);
 
