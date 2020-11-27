@@ -52,6 +52,16 @@ export const isAuth = (isAuth) => async (dispatch) => {
   }
 }
 
+// Create new user account (non-admin user)
+export const createAccount = (email, username) => async (dispatch) => {
+  try {
+      // Send API request here
+      console.log("Here we would send out API request.");
+  } catch (err) {
+      console.error(err.message);
+  }
+}
+
 /** uploadMedia needs to be revised for multiple server scenario */
 
 /** restartService needs to be revised for multiple server scenario */

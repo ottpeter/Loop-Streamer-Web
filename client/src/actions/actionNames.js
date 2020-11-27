@@ -16,3 +16,4 @@ export const SELECT = "SELECT";
 export const SET_PAYMENT_STATUS = "SET_PAYMENT_STATUS";
 export const SET_EMAIL = "SET_EMAIL";
 export const SET_EMAIL_AGAIN = "SET_EMAIL_AGAIN";
+export const SET_USERDATA_ERROR = "SET_USERDATA_ERROR";

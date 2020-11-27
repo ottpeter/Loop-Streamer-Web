@@ -1,4 +1,4 @@
-import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN } from '../actions/actionNames';
+import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR } from '../actions/actionNames';
 
 const initialState = {
   init: null,
@@ -8,6 +8,8 @@ const initialState = {
   selectedProduct: null,
   email: null,
   email_again: null,
+  userdata_error: false,
+  username: null,
   products: [],
 }
 
@@ -43,6 +45,12 @@ const shopReducer = function (state = initialState, action) {
       return {
         ...state,
         email_again: action.payload.email_again
+      }
+    
+    case SET_USERDATA_ERROR:
+      return {
+        ...state,
+        userdata_error: action.payload.isError
       }
 
       default:

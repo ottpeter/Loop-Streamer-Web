@@ -1,4 +1,4 @@
-import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN } from './actionNames';
+import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR } from './actionNames';
 
 // Load products to Redux store
 export const init = () => ({
@@ -27,4 +27,10 @@ export const setEmail = (email) => ({
 export const setEmailAgain = (email_again) => ({
   type: SET_EMAIL_AGAIN,
   payload: { email_again }
+});
+
+// Set userdata_error
+export const setUserError = (isError) => ({
+  type: SET_USERDATA_ERROR,
+  payload: { isError }
 });

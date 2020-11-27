@@ -1,8 +1,9 @@
 const cors = require('cors');
 const fs = require('fs');
 const https = require('https');
-var privKey = fs.readFileSync('/etc/letsencrypt/live/185-167-97-209.cloud-xip.io/privkey.pem', 'utf-8');
-var certificate = fs.readFileSync('/etc/letsencrypt/live/185-167-97-209.cloud-xip.io/cert.pem', 'utf-8');
+require('dotenv').config();
+var privKey = fs.readFileSync(process.env.SSL_KEY, 'utf-8');
+var certificate = fs.readFileSync(process.env.SSL_CERT, 'utf-8');
 var credentials = { key: privKey, cert: certificate };
 const express = require('express');
 var app = express();

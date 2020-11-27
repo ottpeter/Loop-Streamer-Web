@@ -1,43 +1,11 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setEmail, setEmailAgain } from '../../actions/shopActions';
-
-function Example() {
-  const [show, setShow] = React.useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-}
-
+import { setEmail, setEmailAgain, setUserError } from '../../actions/shopActions';
+import ErrorMessage from './ErrorMessage'
 
 function UserInput({email, email_again, dispatch}) {
   const history = useHistory();
@@ -61,23 +29,26 @@ function UserInput({email, email_again, dispatch}) {
   // Redirects to next page
   function submit() {
     if (email === email_again) {
+      dispatch(setUserError(false));
       history.push('/checkout');
     } else {
-     return 
+     dispatch(setUserError(true));
     }
   }
 
   return (
     <div className="shopMain">
       <Navbar />
-      <Example />
+      <ErrorMessage open={true} />
       <div className="userinputGrid">
         <div className="userinputGrid-left">
+          <div className="userinputGrid-row"><FormattedMessage id="user_promt"  defaultMessage="Username:" /></div>
           <div className="userinputGrid-row"><FormattedMessage id="e-mail" defaultMessage="E-mail:" /></div>
           <div className="userinputGrid-row"><FormattedMessage id="e-mail_again" defaultMessage="E-mail again:" /></div>
           <div className="userinputGrid-row"><p></p></div>
         </div>
         <div className="userinputGrid-right">
+          <input></input>
           <input onChange={(e) => handleChange("email", e)}></input>
           <input onChange={(e) => handleChange("email_again", e)}></input>
           <button onClick={() => submit()}>Mindent elfogadok.</button>
@@ -91,6 +62,7 @@ function UserInput({email, email_again, dispatch}) {
 const mapStateToProps = state => ({
   email: state.shop.email,
   email_again: state.shop.email_again,
+  error: state.shop.userdata_error,
 })
 
 export default connect(mapStateToProps)(UserInput);
