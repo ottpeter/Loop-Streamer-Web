@@ -20,6 +20,7 @@ var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
 
 // Create payment route
 router.post('/create-payment', async (req, res) => {
+  console.log("Create payment route...");
   // 2. Call /v1/payments/payment to set up the payment
   request.post(PAYPAL_API + '/v1/payments/payment', {
     auth:
@@ -59,14 +60,18 @@ router.post('/create-payment', async (req, res) => {
       id: response.body.id
     });
   });
+  console.log("Create payment route ended.")
 });
 
 
 // Finalize payment route
 router.post('/execute-payment', async (req, res) => {
+  console.log("Execute route...");
   // 2. Get the payment ID and the payer ID from the request body.
   var paymentID = req.body.paymentID;
   var payerID = req.body.payerID;
+  console.log("paymentID: ", paymentID);
+  console.log("payerID: ", payerID);
   // 3. Call /v1/payments/payment/PAY-XXX/execute to finalize the payment.
   request.post(PAYPAL_API + '/v1/payments/payment/' + paymentID +
     '/execute',
@@ -83,7 +88,7 @@ router.post('/execute-payment', async (req, res) => {
         {
           amount:
           {
-            total: '10.99',
+            total: '5.99',
             currency: 'USD'
           }
         }]
@@ -103,6 +108,7 @@ router.post('/execute-payment', async (req, res) => {
         status: 'success'
       });
     });
+  console.log("Execute route ended.");
 });
 
 module.exports = router;
