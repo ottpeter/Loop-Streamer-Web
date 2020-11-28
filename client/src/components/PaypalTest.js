@@ -8,6 +8,14 @@ export default function PaypalComponent() {
             // 1. Add a payment callback
             payment: function(data, actions) {
               // 2. Make a request to your server
+              const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                  price: 6999
+                })
+              };
+              //return fetch('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment', requestOptions)
               return actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment')
                 .then(function(res) {
                   // 3. Return res.id from the response
