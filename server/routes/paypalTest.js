@@ -18,7 +18,7 @@ function exampleCall() {
 var CLIENT =
   'AahP0uPuabNc2rxw-3Grnsf8ncNchABTp6rPHnrEJ8FVuWw2_uoKY7b8uo-vejfPzfTyrY-0ldPJXAfQ';
 var SECRET =
-  'EOw8LNwDhM7esrQ3nHfzKc7xiWnJc83Eawln4YLfUgivfx1LGzu9Mj0F5wlarilXDqdK9Q5aHVo-VGjJ';
+  'EGqhlqhZE_nk--JI2xGfxRxWf2vR4X5Ssj8pinZrFh3V-pCoeR2Ox7L8tfH45IoN1_pPf2bTPea1GnS1';
 var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
 
 
