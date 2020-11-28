@@ -11,7 +11,7 @@ export default function PaypalComponent() {
               return actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment')
                 .then(function(res) {
                   // 3. Return res.id from the response
-                  console.log("res.id: ", res.body);
+                  console.log("res.id: ", res.id);
                   return res.id;
                 });
             },

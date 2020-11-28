@@ -92,12 +92,7 @@ router.post('/execute-payment', async (req, res) => {
         {
           amount:
           {
-            total: '5.99',      redirect_urls:
-            {
-              return_url: 'https://example.com',
-              cancel_url: 'https://example.com'
-            }
-          },
+            total: '5.99',
             currency: 'USD'
           }
         }]
@@ -106,12 +101,13 @@ router.post('/execute-payment', async (req, res) => {
     },
     function(err, response)
     {
-      if (err)
-      {
+      // If there was an error
+      if (err) {
         console.error(err);
         return res.sendStatus(500);
       }
       // 4. Return a success response to the client
+      console.log("Success.");
       res.json(
       {
         status: 'success'
