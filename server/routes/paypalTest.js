@@ -43,8 +43,8 @@ router.post('/create-payment', async (req, res) => {
       {
         amount:
         {
-          total: '5.99',
-          currency: 'USD'
+          total: '7000',
+          currency: 'HUF'
         }
       }],
       redirect_urls:
@@ -92,8 +92,8 @@ router.post('/execute-payment', async (req, res) => {
         {
           amount:
           {
-            total: '5.99',
-            currency: 'USD'
+            total: '7000',
+            currency: 'HUF'
           }
         }]
       },
@@ -103,7 +103,7 @@ router.post('/execute-payment', async (req, res) => {
     {
       // If there was an error
       if (err) {
-        console.error(err);
+        console.error("Error: ", err);
         return res.sendStatus(500);
       }
       // 4. Return a success response to the client
