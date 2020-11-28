@@ -7,6 +7,10 @@ const validinfo = require("../middleware/validinfo");
 const authorization = require("../middleware/authorization");
 
 
+function exampleCall() {
+  console.log("exampleCall function called!");
+}
+
 
 // Add your credentials:
 // Add your client ID and secret
@@ -88,7 +92,12 @@ router.post('/execute-payment', async (req, res) => {
         {
           amount:
           {
-            total: '5.99',
+            total: '5.99',      redirect_urls:
+            {
+              return_url: 'https://example.com',
+              cancel_url: 'https://example.com'
+            }
+          },
             currency: 'USD'
           }
         }]
@@ -109,6 +118,7 @@ router.post('/execute-payment', async (req, res) => {
       });
     });
   console.log("Execute route ended.");
+  exampleCall();
 });
 
 module.exports = router;

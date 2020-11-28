@@ -1,6 +1,7 @@
 import React from 'react'; 
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import PaypalComponent from './PaypalTest';
 
 function Example() {
   const [show, setShow] = React.useState(false);
@@ -25,6 +26,7 @@ function Example() {
           </Button>
         </Modal.Footer>
       </Modal>
+      <PaypalComponent></PaypalComponent>
     </>
   );
 }

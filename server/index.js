@@ -9,7 +9,7 @@ const express = require('express');
 var app = express();
 const pool = require('./db');
 
-test.serviceHandler("test", "nothing");
+//test.serviceHandler("test", "nothing");
 
 // Middleware
 app.use(cors());

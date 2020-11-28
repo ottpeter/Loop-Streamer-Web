@@ -9,6 +9,7 @@
     // 1. Add a payment callback
     payment: function(data, actions) {
       // 2. Make a request to your server
+      console.log("data(payment): ", data);
       return actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment')
         .then(function(res) {
           // 3. Return res.id from the response
@@ -20,6 +21,7 @@
     // 1. Add an onAuthorize callback
     onAuthorize: function(data, actions) {
       // 2. Make a request to your server
+      console.log("data(onAuthorize): ", data);
       return actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/execute-payment', {
         paymentID: data.paymentID,
         payerID:   data.payerID

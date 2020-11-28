@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { Provider } from 'react-redux';
 import shopReducer from './reducers/shopReducer';
 import boardReducer from './reducers/boardReducer';
@@ -11,13 +11,16 @@ import {  } from './actions/boardActions';
 import thunk from 'redux-thunk';
 import reportWebVitals from './reportWebVitals';
 
-
+// Combining the reducers
 const reducer = combineReducers({
   shop: shopReducer,
   board: boardReducer
 });
 
-let store = createStore(reducer, applyMiddleware(thunk));
+// This is for the Redux Dev Tool
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// Creating the Redux store (with dev tools)
+let store = createStore(reducer, /* preloadedState, */ composeEnhancers( applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>
