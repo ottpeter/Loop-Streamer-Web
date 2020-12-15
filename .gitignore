@@ -104,4 +104,5 @@ dist
 
 # node_modules
 client/node_modules/*
+client/node_modules_bak/*
 server/node_modules/*

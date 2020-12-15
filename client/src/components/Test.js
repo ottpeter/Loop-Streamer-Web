@@ -9,6 +9,23 @@ function Example() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  async function getInfo() {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'curl/7.35.0',
+        'Host': 'console.kamatera.com',
+        'Accept': '*/*',
+        'AuthClientId': 'a759573dab2e33880e3b5f5492a8a227',
+        'AuthSecret': 'bbae6d1ba15fe6444786bec36839c84c'
+      }
+    }
+    const res = await fetch('https://console.kamatera.com/service/servers', requestOptions)
+    .then(response => response.json())
+    .catch(err => console.error("Error: ", err));
+    console.log("Kamatera response: ", res);
+  }
+
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
@@ -27,6 +44,7 @@ function Example() {
         </Modal.Footer>
       </Modal>
       <PaypalComponent></PaypalComponent>
+      <button onClick={() => getInfo()} className="btn-info"> Get Kamatera Info</button>
     </>
   );
 }

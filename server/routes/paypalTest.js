@@ -9,6 +9,10 @@ const authorization = require("../middleware/authorization");
 
 function exampleCall() {
   console.log("exampleCall function called!");
+
+  // Test server creation
+
+  
 }
 
 
