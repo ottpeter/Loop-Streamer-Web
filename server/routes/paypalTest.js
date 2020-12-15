@@ -12,7 +12,18 @@ function exampleCall() {
 
   // Test server creation
 
-  
+  const testOptions = {
+    method: 'GET',
+    headers: {
+      'AuthClientId': '',
+      'AuthSecret': ''
+    }
+  }
+  const testRes = request.get('https://console.kamatera.com/service/servers', testOptions, function(err, response) {
+    console.log("Error: ", err);
+    console.log("Kamatera: ", response.body);
+  });
+
 }
 
 
