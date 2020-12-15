@@ -13,13 +13,24 @@ function exampleCall() {
   // Test server creation
 
   const testOptions = {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'AuthClientId': '',
       'AuthSecret': ''
+    },
+    body: {
+      "datacenter": "EU",
+      "name": "api_server_demo_basic",
+      "password": "pass123q",
+      "cpu": "1B",
+      "ram": "256",
+      "billing": "hourly",
+      "disk_size_0": "5",
+      "disk_src_0": "EU%3A6000C29d53faf52015f1b1e8b6bc26ed",
+      "network_name_0": "wan"
     }
   }
-  const testRes = request.get('https://console.kamatera.com/service/servers', testOptions, function(err, response) {
+  const testRes = request.get('https://console.kamatera.com/service/server', testOptions, function(err, response) {
     console.log("Error: ", err);
     console.log("Kamatera: ", response.body);
   });
