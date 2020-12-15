@@ -6,7 +6,7 @@ export default function PaypalComponent() {
             env: 'sandbox', // Or 'production'
             // Set up the payment:
             // 1. Add a payment callback
-            payment: function(data, actions) {
+            payment: async function(data, actions) {
               // 2. Make a request to your server
               const requestOptions = {
                 method: 'POST',
@@ -15,13 +15,13 @@ export default function PaypalComponent() {
                   price: 6999
                 })
               };
-              //return fetch('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment', requestOptions)
-              return actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment')
-                .then(function(res) {
-                  // 3. Return res.id from the response
-                  console.log("res.id: ", res.id);
-                  return res.id;
-                });
+              /** The first verison doesn't give response and price is not in request, 
+               * the second gives respnse and there is price */
+              //const res = actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment')
+              const res = await fetch('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment', requestOptions).then(response => response.json());
+              // 3. Return res.id from the response
+              console.log("res.id: ", res.id);
+              return res.id;
             },
             // Execute the payment:
             // 1. Add an onAuthorize callback

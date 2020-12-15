@@ -25,6 +25,7 @@ var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
 // Create payment route
 router.post('/create-payment', async (req, res) => {
   console.log("Create payment route...");
+  console.log("req.body(create-payment): ", req.body);
   // 2. Call /v1/payments/payment to set up the payment
   request.post(PAYPAL_API + '/v1/payments/payment', {
     auth:
@@ -43,7 +44,7 @@ router.post('/create-payment', async (req, res) => {
       {
         amount:
         {
-          total: req.body.price,
+          total: '7000',
           currency: 'HUF'
         }
       }],
