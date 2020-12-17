@@ -15,27 +15,28 @@ function exampleCall() {
   const testOptions = {
     method: 'POST',
     headers: {
-      'AuthClientId': '',
-      'AuthSecret': ''
+      'content-type': 'application/json',
+      'AuthClientId': 'a759573dab2e33880e3b5f5492a8a227',
+      'AuthSecret': 'bbae6d1ba15fe6444786bec36839c84c'
     },
-    body: {
+    body: JSON.stringify({
       "datacenter": "EU",
       "name": "api_server_demo_basic",
-      "password": "pass123q",
+      "password": "pass123qZ#1234",
       "cpu": "1B",
-      "ram": "256",
+      "ram": "512",
       "billing": "hourly",
-      "disk_size_0": "5",
-      "disk_src_0": "EU%3A6000C29d53faf52015f1b1e8b6bc26ed",
+      "disk_size_0": "10",
+      "disk_src_0": "EU:6000C298f8b5c5ff2c2aa9e46ac0d80c",
       "network_name_0": "wan"
-    }
+    })
   }
-  const testRes = request.get('https://console.kamatera.com/service/server', testOptions, function(err, response) {
+  const testRes = request.post('https://console.kamatera.com/service/server', testOptions, function(err, response) {
     console.log("Error: ", err);
-    console.log("Kamatera: ", response.body);
+    console.log("Kamatera: ", response);
   });
-
 }
+
 
 
 // Add your credentials:
