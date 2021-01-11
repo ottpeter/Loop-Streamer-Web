@@ -29,6 +29,7 @@ function Register({email, email_again, dispatch}) {
   // Redirects to next page
   function submit() {
     if (email === email_again) {
+      /** Call API that will register the user, or give error. */
       dispatch(setUserError(false));
       history.push('/checkout');
     } else {
@@ -45,12 +46,16 @@ function Register({email, email_again, dispatch}) {
           <div className="userinputGrid-row"><FormattedMessage id="user_promt"  defaultMessage="Username:" /></div>
           <div className="userinputGrid-row"><FormattedMessage id="e-mail" defaultMessage="E-mail:" /></div>
           <div className="userinputGrid-row"><FormattedMessage id="e-mail_again" defaultMessage="E-mail again:" /></div>
+          <div className="userinputGrid-row"><FormattedMessage id="new_password" defaultMessage="Password:" /></div>
+          <div className="userinputGrid-row"><FormattedMessage id="new_password_again" defaultMessage="Password again:" /></div>
           <div className="userinputGrid-row"><p></p></div>
         </div>
         <div className="userinputGrid-right">
           <input></input>
           <input onChange={(e) => handleChange("email", e)}></input>
           <input onChange={(e) => handleChange("email_again", e)}></input>
+          <input onChange={(e) => handleChange("password", e)}></input>
+          <input onChange={(e) => handleChange("password_again", e)}></input>
           <button onClick={() => submit()}>Mindent elfogadok.</button>
         </div>
       </div>
