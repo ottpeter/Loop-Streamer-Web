@@ -5,6 +5,8 @@ export const LOGOUT = "LOGOUT";
 export const DELETE_USER = "DELETE_USER";       // User can request account deletion.
 export const CHANGE_PWD = "CHANGE_PASSWORD";
 export const SET_USERNAME = "SET_USERNAME";     // User can't change his own username.
+export const SET_PASSWORD = "SET_PASSWORD";
+export const SET_PASSWORD_AGAIN = "SET_PASSWORD_AGAIN";
 
 // The file upload should happen to the server instance
 export const NEW_UPLOAD = "NEW_UPLOAD";

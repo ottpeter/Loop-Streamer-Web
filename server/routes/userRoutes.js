@@ -15,7 +15,7 @@ router.post('/init', async (req,res) => {
           "admin"
       ]);
       if (user.rows.length !== 0) {
-          return res.status(401).send("Admin user was already created!.");
+          return res.status(401).send({error: "Admin user was already created!."});
       }
 
       //2. Bcrypt the password "admin"
@@ -73,7 +73,7 @@ router.post('/register', validinfo, async (req,res) => {
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server side error in Register route. \n" + err);
+        res.status(500).send({error: "Server side error in Register route. \n" + err});
     }
 });
 

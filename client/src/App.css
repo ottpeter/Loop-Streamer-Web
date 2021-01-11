@@ -8,6 +8,8 @@
   --shopWhite: #EEEEEE;
   --paymentGreen: #00EE00;
   --paymentRed: #EE0000;
+  --formGreen: #00EE00;
+  --formRed: #EE0000;
 }
 
 /*html,body {
@@ -110,4 +112,12 @@
   display: flex;
   background-color: #00EE00;
   flex-direction: column;
+}
+
+.form-green {
+  background-color: var(--formGreen);
+}
+
+.form-red {
+  background-color: var(--formRed);
 }

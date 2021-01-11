@@ -1,7 +1,6 @@
 import React from 'react';
 import PaypalExpressBtn from 'react-paypal-express-checkout';
 import { setStatus } from '../../actions/shopActions';
-import { createAccount } from '../../actions/boardActions';
 import { connect } from 'react-redux';
 require('dotenv').config();
  
@@ -12,7 +11,7 @@ class PayPal extends React.Component {
             // You can bind the "payment" object's value to your state or props or whatever here, please see below for sample returned data
                 console.log("The payment was succeeded!", payment);
                 // Set payment status successful
-                this.props.dispatch(createAccount(this.props.email, this.props.username));
+                /*OBSOLATE*///this.props.dispatch(createAccount(this.props.email, this.props.username));
                 this.props.dispatch(setStatus("SUCCESS", true));
                 this.props.history.push('/done');
         }

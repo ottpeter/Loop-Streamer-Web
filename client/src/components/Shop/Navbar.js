@@ -12,6 +12,9 @@ export default function Navbar() {
           <Link to="/about"><FormattedMessage id="about" defaultMessage="About" /></Link>
         </li>
         <li className="nav-item ml-5">
+          <Link to="/register"><FormattedMessage id="register" defaultMessage="Register" /></Link>
+        </li>
+        <li className="nav-item ml-5">
           <Link to="/board/login"><FormattedMessage id="login" defaultMessage="Login" /></Link>
         </li>
       </ul>
