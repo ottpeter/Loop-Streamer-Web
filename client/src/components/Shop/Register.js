@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { setEmail, setEmailAgain, setUserError } from '../../actions/shopActions';
 import ErrorMessage from './ErrorMessage'
 
-function UserInput({email, email_again, dispatch}) {
+function Register({email, email_again, dispatch}) {
   const history = useHistory();
 
   function handleChange(selector, e) {
@@ -65,4 +65,4 @@ const mapStateToProps = state => ({
   error: state.shop.userdata_error,
 })
 
-export default connect(mapStateToProps)(UserInput);
+export default connect(mapStateToProps)(Register);

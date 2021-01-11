@@ -102,10 +102,12 @@
 
 .userinputGrid-left {
   display: flex;
+  background-color: #000066;
   flex-direction: column;
 }
 
 .userinputGrid-right {
   display: flex;
+  background-color: #00EE00;
   flex-direction: column;
 }

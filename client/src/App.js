@@ -5,7 +5,7 @@ import About from './components/Shop/About';
 import Details from './components/Shop/Details';
 import Checkout from './components/Shop/Checkout';
 import Done from './components/Shop/Done';
-import UserInput from './components/Shop/UserInput';
+import Register from './components/Shop/Register';
 import Test from './components/Test';
 import MainBoard from './components/Board';
 import Account from './components/Board/Account';
@@ -39,6 +39,7 @@ class App extends React.Component {
           <BrowserRouter>
             <Switch>
 
+              {/** TODO need to check whether the user has active service or not. If not, offer to buy. */}
               <Route exact path="/" render={props => this.props.isLoggedIn ? (
                 <Redirect to="/board/" />
                 ) : (
@@ -60,7 +61,7 @@ class App extends React.Component {
               <Route exact path="/done" render={() => <Done />} />
 
               {/** User Data */}
-              <Route exact path="/userinput" component={UserInput} />
+              <Route exact path="/register" component={Register} />
 
               {/** Test */}
               <Route exact path="/test" component={Test} />

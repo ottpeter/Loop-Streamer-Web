@@ -30,9 +30,11 @@ react-router-dom utak:
 /about
 /purchase_done
 
+Egy username-hez egy server tartozik. Lehetséges egy természetes személynek többször regisztrálnia.
 
 
 ## Mi az, amit meg akarsz valósítani?
   ~azt, hogy ezt az API route-ot ne lehessen meghívni kívülről, csak a rendszer tudja lefuttatni.~
   azt, hogy ezt az utat a kliens hívja meg, de nem tudja manuálisan lefuttatni (valami.com/create nem fog működni.)
   Kell egy secret, amit vagy .env-ben tárolunk vagy valahol máshol.
+
