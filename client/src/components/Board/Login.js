@@ -5,21 +5,6 @@ import { LOGOUT } from '../../actions/actionNames';
 import { userLogin, setLoginNameField, setPasswordField, LoginRequest } from '../../actions/boardActions';
 
 function Login({dispatch, isLoggedIn, username, password}) {
-  /*const [inputs, setInputs] = useState({
-      name: "",
-      password: ""
-  });
-
-  const {name, password} = inputs;
-
-  // Handles form change (both username and password)
-  const onChange = e => {
-      setInputs({
-          ...inputs,
-          [e.target.name]: e.target.value
-      });
-  }*/
-
   const onChangeNameField = e => {
     dispatch(setLoginNameField(e.target.value));
   }
@@ -35,9 +20,10 @@ function Login({dispatch, isLoggedIn, username, password}) {
     if (5 !== 5) {
       console.error("Error! 5 is not equal 5!");
     } else {
+      console.log("Dispatching Login Request...");
       dispatch(LoginRequest(username, password));
     }
-    try {
+    /*try {
         // Constructing the body of the API call
         const body = {username, password};
         // Sending API request
@@ -62,7 +48,7 @@ function Login({dispatch, isLoggedIn, username, password}) {
     } catch (err) {
         console.error(err.message);
         toast.error("Error in application (Login)");
-    }
+    }*/
 }
 
   return (

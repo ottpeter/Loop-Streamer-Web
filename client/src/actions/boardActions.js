@@ -15,6 +15,7 @@ export const LoginRequest = (username, password) => async (dispatch) => {
     const body = {username, password};
 
     // Sending the API request
+    console.log(process.env.REACT_APP_SERVER_URL + ":" + process.env.REACT_APP_SERVER_PORT + "/users/login");
     const response = await fetch(process.env.REACT_APP_SERVER_URL + ":" + process.env.REACT_APP_SERVER_PORT + "/users/login", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -22,6 +23,7 @@ export const LoginRequest = (username, password) => async (dispatch) => {
     });
     // Convert response to JSON
     const parseRes = await response.json();
+    console.log(parseRes);
 
     // If login was successful, set cookie, else, dispatch LOGOUT event
     if (parseRes.token) {

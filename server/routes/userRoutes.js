@@ -121,13 +121,13 @@ router.post('/login', validinfo, async (req, res) => {
         ]);
 
         if (user.rows.length === 0) {
-            return res.status(401).json("Password or username is incorrect.");
+            return res.status(401).json({error: "Password or username is incorrect."});
         }
 
         //3. check if incoming password is the same as the database password
         const validPassword = await bcrypt.compare(password, user.rows[0].pass);
         if (!validPassword) {
-            return res.status(401).json("Password or username is incorrect.");
+            return res.status(401).json({error: "Password or username is incorrect."});
         }
         
         //4. give them the jwt token
@@ -136,7 +136,7 @@ router.post('/login', validinfo, async (req, res) => {
             
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server side error in Login route. \n" + err);
+        res.status(500).send({error: "Server side error in Login route. \n" + err});
     }
 });
 
