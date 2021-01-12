@@ -59,10 +59,9 @@ export const setUserError = (isError) => ({
 // Create new user account (non-admin user)
 export const createAccount = (email, username, password) => async (dispatch) => {
   try {
-      // Send API request here
       // We should test if username exist before sending API request.
+
       // Send out API request
-      console.log(process.env.REACT_APP_SERVER_PORT)
       const reqBody = { 
         username: username, 
         email: email, 

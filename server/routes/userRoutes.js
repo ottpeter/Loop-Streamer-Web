@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const validinfo = require("../middleware/validinfo");
 const authorization = require("../middleware/authorization");
+const nodemailer = require("nodemailer");
 
 // Create admin user
 router.post('/init', async (req,res) => {
@@ -52,7 +53,7 @@ router.post('/register', validinfo, async (req,res) => {
             username
         ]);
         if (checkUser.rows.length !== 0) {
-            return res.status(401).send("User already exists.");
+            return res.status(401).send({error: "User already exists."});
         }
 
         //3. Bcrypt the user password
@@ -68,8 +69,38 @@ router.post('/register', validinfo, async (req,res) => {
             "INSERT INTO users (username, email, pass, selected_service, service_active) VALUES ($1, $2, $3, $4, $5) RETURNING *",
             [username, email, bcryptPassword, "none", "false"]
         );
-        res.json({"username": username})
+    
+        // Connection object
+        let transporter = nodemailer.createTransport({
+            host: '127.0.0.1',
+            port: 25,
+            // auth: {
+            //     user: user,
+            //     pass: pass
+            // },
+            // TODO
+            secure: false,
+            tls:{
+                rejectUnauthorized: false
+            }
+        });
 
+        // Creating the message...
+        let message = {
+        from: "matie@63-250-57-43.cloud-xip.io",
+        to: "jiqlnfqi@sharklasers.com",
+        subject: "This is the title",
+        text: "Hello World! :) user " + username + " created!",
+        html: "<p>Hello World :)</p><p>" + username + " created!</p>"
+        };
+
+
+        console.log("Sending message...");
+        transporter.sendMail(message);
+        console.log("Message sent!");
+
+        // Send back the newly registered username
+        res.json({"username": username})
 
     } catch (err) {
         console.error(err.message);
