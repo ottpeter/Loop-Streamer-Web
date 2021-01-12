@@ -108,6 +108,38 @@ router.post('/register', validinfo, async (req,res) => {
     }
 });
 
-/** ... */
+
+// Login
+router.post('/login', validinfo, async (req, res) => {
+    try {
+        //1. destructure the req.body
+        const { name, password } = req.body;
+
+        //2. check if user doesn't exist (if not, throw error)
+        const user = await pool.query("SELECT * FROM users WHERE username = $1", [
+            name
+        ]);
+
+        if (user.rows.length === 0) {
+            return res.status(401).json("Password or username is incorrect.");
+        }
+
+        //3. check if incoming password is the same as the database password
+        const validPassword = await bcrypt.compare(password, user.rows[0].pass);
+        if (!validPassword) {
+            return res.status(401).json("Password or username is incorrect.");
+        }
+        
+        //4. give them the jwt token
+        const token = jwtGenerator(user.rows[0].user_id);
+        res.json({ token });
+            
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server side error in Login route. \n" + err);
+    }
+});
+
+/** ...  TODO ... */
 
 module.exports = router;

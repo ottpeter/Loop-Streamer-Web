@@ -60,6 +60,7 @@ export const setUserError = (isError) => ({
 export const createAccount = (email, username, password) => async (dispatch) => {
   try {
       // We should test if username exist before sending API request.
+      //TODO
 
       // Send out API request
       const reqBody = { 
@@ -76,6 +77,7 @@ export const createAccount = (email, username, password) => async (dispatch) => 
       });
       // Analyze the response
       const parseRes = await response.json();
+      //TODO change state!
       console.log(parseRes);
   } catch (err) {
       console.error(err.message);
