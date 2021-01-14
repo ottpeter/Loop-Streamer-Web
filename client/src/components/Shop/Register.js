@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { createAccount, setEmail, setEmailAgain, setPassword, setPasswordAgain, setUserError, setUsername } from '../../actions/shopActions';
 import ErrorMessage from './ErrorMessage'
 
-function Register({username, email, email_again, password, password_again, error, dispatch}) {
+function Register({username, email, email_again, password, password_again, selected_service, error, dispatch}) {
   const history = useHistory();
 
   function handleChange(selector, e) {
@@ -47,7 +47,7 @@ function Register({username, email, email_again, password, password_again, error
     } else {
       /** Call API that will register the user, or give error. */
       dispatch(setUserError(false));
-      dispatch(createAccount(email, username, password));
+      dispatch(createAccount(email, username, password, selected_service));
       //history.push('/checkout');
     }
   }
@@ -85,6 +85,7 @@ const mapStateToProps = state => ({
   password: state.shop.password,
   password_again: state.shop.password_again,
   username: state.shop.username,
+  selected_service: "testing",
   error: state.shop.userdata_error,
 })
 

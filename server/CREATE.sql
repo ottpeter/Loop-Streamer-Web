@@ -5,6 +5,8 @@ CREATE TABLE users (
     pass char (60) NOT NULL,
     selected_service varchar (16) NOT NULL,
     service_active boolean NOT NULL,
+    user_active boolean DEFAULT FALSE,
+    activation_hash char (32),
     paid_until date
 );
 

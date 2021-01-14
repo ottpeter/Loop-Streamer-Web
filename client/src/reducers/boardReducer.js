@@ -1,4 +1,4 @@
-import { INIT, SET_LOGINNAME_FIELD, SET_PASSWORD_FIELD } from '../actions/actionNames';
+import { INIT, LOGIN, LOGOUT, SET_LOGINNAME_FIELD, SET_PASSWORD_FIELD } from '../actions/actionNames';
 
 const initialState = {
   isLoggedIn: false,
@@ -23,6 +23,21 @@ const boardReducer = function (state = initialState, action) {
       return {
         ...state,
         loginPassword: action.payload.password
+      }
+    
+    case LOGIN:
+      return {
+        ...state,
+        username: action.payload.username,
+        loginPassword: null,
+        isLoggedIn: true
+      }
+
+    case LOGOUT:
+      return {
+        ...state,
+        loginPassword: null,
+        isLoggedIn: false,
       }
 
     default:

@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-import { LOGOUT } from '../../actions/actionNames';
-import { userLogin, setLoginNameField, setPasswordField, LoginRequest } from '../../actions/boardActions';
+import { setLoginNameField, setPasswordField, LoginRequest } from '../../actions/boardActions';
 
 function Login({dispatch, isLoggedIn, username, password}) {
   const onChangeNameField = e => {
@@ -21,35 +20,14 @@ function Login({dispatch, isLoggedIn, username, password}) {
       console.error("Error! 5 is not equal 5!");
     } else {
       console.log("Dispatching Login Request...");
-      dispatch(LoginRequest(username, password));
+      let response = await dispatch(LoginRequest(username, password));
+      if (response === "SUCCESS") {
+        toast.success("Logged in successfully. Welcome " + username + "!");
+      } else {
+        toast.error(response.error);
+      }
     }
-    /*try {
-        // Constructing the body of the API call
-        const body = {username, password};
-        // Sending API request
-        const response = await fetch('https://185-167-97-209.cloud-xip.io:5000/users/login', {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(body)
-        });
-        const parseRes = await response.json();
-
-        // If login was successful, set cookie, else, dispatch LOGOUT event
-        if (parseRes.token) {
-            //set cookie
-            localStorage.setItem("token", parseRes.token);
-            dispatch(userLogin());
-            toast.success("Logged in successfully. Welcome " + username + "!");
-        } else {
-            dispatch({type: LOGOUT});
-            toast.error(parseRes);
-        }
-
-    } catch (err) {
-        console.error(err.message);
-        toast.error("Error in application (Login)");
-    }*/
-}
+  }
 
   return (
     <div id="login" className="login">

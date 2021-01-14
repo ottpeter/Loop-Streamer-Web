@@ -15,9 +15,13 @@ import Default from './components/Default';
 import { init } from './actions/shopActions';
 import { IntlProvider, FormattedMessage, FormattedNumber } from 'react-intl';       // Localization
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+
+toast.configure();
 
 // Hungarian 
 const hunLabels = require('./languages/Hungarian.json');
@@ -114,7 +118,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.isLoggedIn
+  isLoggedIn: state.board.isLoggedIn,
 });
 
 export default connect(mapStateToProps)(App);

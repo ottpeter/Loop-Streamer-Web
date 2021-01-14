@@ -30,10 +30,10 @@ export const LoginRequest = (username, password) => async (dispatch) => {
       //set cookie
       localStorage.setItem("token", parseRes.token);
       dispatch(userLogin());
-      toast.success("Logged in successfully. Welcome " + username + "!");
+      return "SUCCESS"
     } else {
       dispatch({type: LOGOUT});
-      toast.error(parseRes);
+      return parseRes;
     }
 
   } catch (err) {
