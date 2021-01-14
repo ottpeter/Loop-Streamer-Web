@@ -13,6 +13,7 @@ import Settings from './components/Board/Settings';
 import Login from './components/Board/Login';
 import Default from './components/Default';
 import { init } from './actions/shopActions';
+import Verify from './components/Shop/Verify';
 import { IntlProvider, FormattedMessage, FormattedNumber } from 'react-intl';       // Localization
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,6 +21,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { isAuth } from './actions/boardActions';
+import CheckEmail from './components/Shop/CheckEmail';
+
 
 toast.configure();
 
@@ -31,6 +35,7 @@ class App extends React.Component {
   // Init
   componentDidMount() {
     this.props.dispatch(init());
+    this.props.dispatch(isAuth());
   }
 
   render() {
@@ -45,12 +50,12 @@ class App extends React.Component {
 
               {/** TODO need to check whether the user has active service or not. If not, offer to buy. */}
               <Route exact path="/" render={props => this.props.isLoggedIn ? (
-                <Redirect to="/board/" />
-                ) : (
-                  <Shop />
+                    <Redirect to="/board/" />
+                  ) : (
+                    <Shop />
                   )
                 }
-                />
+              />
 
               {/** About page for the shop */}
               <Route exact path="/about" component={About} />
@@ -58,8 +63,20 @@ class App extends React.Component {
               {/** Detailed view of specific product (small/medium/large) */}
               <Route exact path="/details" render={() => <Details />} />
               
+              {/** Check your e-mail page */}
+              <Route exact path="/emailsent" render={() => <CheckEmail />} />
+
               {/** Payment options */}
-              <Route exact path="/checkout" render={() => <Checkout />} />
+              <Route exact path="/checkout" render={props => this.props.isLoggedIn ?(
+                  <Checkout />
+                ) : (
+                  <Redirect to="/" />
+                )
+              } 
+              />
+
+              {/** Verify user (Activation link) */}
+              <Route path="/verify/:hash" render={() => <Verify />} />
 
               {/** Notification about payment */}
               <Route exact path="/done" render={() => <Done />} />

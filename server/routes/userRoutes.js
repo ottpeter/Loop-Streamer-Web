@@ -69,6 +69,7 @@ router.post('/register', validinfo, async (req,res) => {
         // Generate activation hash
         let activationHash = sha256(salt.substr(1, 8) + username + email + new Date());
         activationHash = Base64.stringify(activationHash);
+        activationHash = activationHash.replaceAll("/", '0')
         console.log("activationHash: ", activationHash);
 
         //4. Enter the user inside our database
@@ -97,8 +98,8 @@ router.post('/register', validinfo, async (req,res) => {
         from: "matie@63-250-57-43.cloud-xip.io",
         to: "jiqlnfqi@sharklasers.com",
         subject: "This is the title",
-        text: "Hello World! :) user " + username + " created! Activation hash: " + activationHash,
-        html: "<p>Hello World :)</p><p>" + username + " created!</p><p>Activation hash: " + activationHash + "</p>"
+        text: "Hello World :) Your username is " + username + ". Please click on the link bellow to activate your account: http://localhost:3000/verify/: " + activationHash,
+        html: "<p>Hello World :) Your username is " + username + ".</p><p>Please click on the link bellow to activate your account: </p><a href='http://localhost:3000/verify/" + activationHash + "'>LINK</a>"
         };
 
 
@@ -116,27 +117,34 @@ router.post('/register', validinfo, async (req,res) => {
 });
 
 router.get('/verify/:hash', async (req, res) => {
-    const verificationHash = req.params.hash;
-
-    // Check if hash exists in the database
-    const chechHash = await pool.query("SELECT username FROM users WHERE activation_hash = $1", 
-        [verificationHash]
-    );
-    if (chechHash.rows.length === 0) {
-        console.log("There is no such verification hash in the database.");
-        return res.status(401).send({error: "There is no such verification hash in the database."});
-    }
-
-    // Change user to active & Delete the hash from the database (null)
-    console.log("This is the username: ", chechHash.rows[0].username);
-    const changeToActive = await pool.query("UPDATE users SET user_active = TRUE, activation_hash = null WHERE username = $1", 
+    try {
+        const verificationHash = req.params.hash;
+    
+        // Check if hash exists in the database
+        const chechHash = await pool.query("SELECT username, selected_service FROM users WHERE activation_hash = $1", 
+            [verificationHash]
+        );
+        if (chechHash.rows.length === 0) {
+            console.log("There is no such verification hash in the database.");
+            return res.status(401).send({error: "There is no such verification hash in the database."});
+        }
+    
+        // Change user to active & Delete the hash from the database (null)
+        console.log("This is the username: ", chechHash.rows[0].username);
+        const changeToActive = await pool.query("UPDATE users SET user_active = TRUE, activation_hash = null WHERE username = $1", 
         [chechHash.rows[0].username]
-    );
-    
-    // 
-    
-    
-    res.json({username: chechHash.rows[0].username});
+        );
+        console.log("The user was activated.")
+        
+        // We send back the username to the client
+        res.json({
+            username: chechHash.rows[0].username, 
+            selectedProduct: chechHash.rows[0].selected_service
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send({error: "Server side error in Verify route. \n" + err});        
+    }
 });
 
 
@@ -171,6 +179,23 @@ router.post('/login', validinfo, async (req, res) => {
     }
 });
 
-/** ...  TODO ... */
+//This will simply give back the user as JSON
+router.get('/get-username', authorization, async (req, res) => {
+    try {
+        //req.user has the payload
+        //res.json(req.user);
+
+        const user = await pool.query("SELECT username FROM users WHERE user_id = $1", [
+            req.user
+        ]);
+
+        res.json(user.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({error: "Server error while in dashboard. \n " + err});
+    }
+});
+
+/** ...  TODO  DELETE USER, CHANGE PW... */
 
 module.exports = router;

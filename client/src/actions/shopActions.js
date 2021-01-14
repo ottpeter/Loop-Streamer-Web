@@ -1,4 +1,4 @@
-import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR, SET_USERNAME, SET_PASSWORD, SET_PASSWORD_AGAIN } from './actionNames';
+import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR, SET_USERNAME, SET_PASSWORD, SET_PASSWORD_AGAIN, USER_ACTIVATED, CODE_INVALID } from './actionNames';
 // Server URL is stored in .env
 // With REACT_APP_ prefix we don't need dotenv, because we use create-react-app
 //require('dotenv').config();
@@ -82,5 +82,27 @@ export const createAccount = (email, username, password, selected_service) => as
       console.log(parseRes);
   } catch (err) {
       console.error(err.message);
+  }
+}
+
+// Verify hash (Activate user)
+export const verifyAccount = (hash) => async (dispatch) => {
+  try {
+    const response = await fetch(process.env.REACT_APP_SERVER_URL + ":" + process.env.REACT_APP_SERVER_PORT + "/users/verify/" + hash, {
+      method: "GET"
+    });
+    const parseRes = await response.json();
+    if (parseRes.hasOwnProperty("username")) {
+      console.log("Account activated!");
+      dispatch({type: USER_ACTIVATED});
+      dispatch(setUsername(parseRes.username));
+      console.log("parseRes.selectedProduct: ", parseRes.selectedProduct)
+      dispatch(selectProduct(parseRes.selectedProduct));
+    } else {
+      console.log("Activation link not valid.");
+      dispatch({type: CODE_INVALID});
+    }
+  } catch (err) {
+    console.error(err.message);
   }
 }

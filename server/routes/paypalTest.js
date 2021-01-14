@@ -71,7 +71,7 @@ router.post('/create-payment', async (req, res) => {
       {
         amount:
         {
-          total: '7000',
+          total: req.body.price,
           currency: 'HUF'
         }
       }],
@@ -120,7 +120,7 @@ router.post('/execute-payment', async (req, res) => {
         {
           amount:
           {
-            total: '7000',
+            total: req.body.price,
             currency: 'HUF'
           }
         }]

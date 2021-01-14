@@ -10,6 +10,13 @@
   --paymentRed: #EE0000;
   --formGreen: #00EE00;
   --formRed: #EE0000;
+
+  --boardMain: #89904f;
+  --boardBackground: #aeb477;
+  --boardActive: #EEEE00;
+  --boardHover: #AA0000;
+  --boardHoverBackground: #EEEEEE;
+  --boardWhite: #EEEEEE;
 }
 
 /*html,body {
@@ -35,6 +42,28 @@
   bottom: 0;
   height: 20vh;
   color: var(--shopWhite);
+}
+
+.boardMain {
+  background-color: var(--boardBackground);
+  height: 100vh;
+  text-align: center;
+  margin: auto;
+}
+
+.boardNav {
+  background-color: var(--boardMain);
+  position: fixed;
+  top: 0;
+}
+
+.boardFooter {
+  background-color: var(--boardMain);
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  height: 20vh;
+  color: var(--boardWhite);
 }
 
 .buyButton {

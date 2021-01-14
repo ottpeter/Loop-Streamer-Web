@@ -9,6 +9,8 @@ import { useHistory } from 'react-router-dom';
 function Checkout({selectedProduct, products}) {
   const history = useHistory();
   
+  // INSERT PAYPAL FUNCTION HERE
+
   function createOrder(data, actions) {
     // 2. Make a request to your server
     console.log("data(payment): ", data);
@@ -46,11 +48,12 @@ function Checkout({selectedProduct, products}) {
         </div>
         <div className="checkoutGrid-paymentOptions">
           <div className="checkoutGrid-Paypal">
-            <PayPalButton 
+          <div id="paypal-button">something like that.</div>
+            {/*<PayPalButton 
               total={parseInt(products[selectedProduct].price)} history={history} 
               createOrder={(data, actions) => createOrder(data, actions)}
               onApprove={(data, actions) => onApprove(data, actions)}
-            />
+            />*/}
           </div>
           <div className="checkoutGrid-Card">Credit Card</div>
           <div className="checkoutGrid-Crypto"></div>

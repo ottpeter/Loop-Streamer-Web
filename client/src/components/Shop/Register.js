@@ -48,7 +48,7 @@ function Register({username, email, email_again, password, password_again, selec
       /** Call API that will register the user, or give error. */
       dispatch(setUserError(false));
       dispatch(createAccount(email, username, password, selected_service));
-      //history.push('/checkout');
+      history.push('/emailsent');
     }
   }
 
@@ -85,7 +85,8 @@ const mapStateToProps = state => ({
   password: state.shop.password,
   password_again: state.shop.password_again,
   username: state.shop.username,
-  selected_service: "testing",
+  selected_service: state.shop.selectedProduct,
+  products: state.shop.products,
   error: state.shop.userdata_error,
 })
 

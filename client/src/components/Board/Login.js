@@ -1,9 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import Navbar from './Navbar';
+import Footer from './Footer'
 import { setLoginNameField, setPasswordField, LoginRequest } from '../../actions/boardActions';
 
-function Login({dispatch, isLoggedIn, username, password}) {
+function Login({dispatch, isLoggedIn, username, shopUsername, password}) {
+  useEffect(() => {
+    if (shopUsername !== null) dispatch(setLoginNameField(shopUsername));
+    return () => {
+      console.log("setting username done");
+    }
+  }, []);
+
   const onChangeNameField = e => {
     dispatch(setLoginNameField(e.target.value));
   }
@@ -30,36 +40,41 @@ function Login({dispatch, isLoggedIn, username, password}) {
   }
 
   return (
-    <div id="login" className="login">
-      <h1>Logo</h1>
-      <form onSubmit={onSubmitForm} className="login-form">
-          <input 
-              type="text"
-              name="name"
-              placeholder="username"
-              className="formElement"
-              value={username}
-              onChange={e => onChangeNameField(e)}
-          />
-          <input 
-              type="password"
-              name="password"
-              placeholder="password"
-              className="formElement"
-              value={password}
-              onChange={e => onChangePasswordField(e)}
-          />
-          <button>
-              Login
-          </button>
-      </form>
-    </div>
+        <div className="boardMain">
+        <Navbar />
+          <div id="login" className="login">
+            <h1>Logo</h1>
+            <form onSubmit={onSubmitForm} className="login-form">
+                <input 
+                    type="text"
+                    name="name"
+                    placeholder="username"
+                    className="formElement"
+                    value={username}
+                    onChange={e => onChangeNameField(e)}
+                />
+                <input 
+                    type="password"
+                    name="password"
+                    placeholder="password"
+                    className="formElement"
+                    value={password}
+                    onChange={e => onChangePasswordField(e)}
+                />
+                <button>
+                    Login
+                </button>
+            </form>
+          </div>
+        <Footer />
+      </div>
   )
 }
 
 const mapStateToProps = state => ({
   isLoggedIn: state.board.isLoggedIn,
   username: state.board.username,
+  shopUsername: state.shop.username,
   password: state.board.loginPassword
 });
 

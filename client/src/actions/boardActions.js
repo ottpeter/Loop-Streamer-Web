@@ -79,8 +79,9 @@ export const setProgess = (id, filename, progress, done) => ({
 // Get username from JWT token or LOGOUT if not authenticated
 export const isAuth = (isAuth) => async (dispatch) => {
   try {
+      console.log("Checking if user is logged in...")
       //Getting authentication from server
-      const response = await fetch(process.env.SERVER_URL + ":" + process.env.SERVER_PORT + "/users/get-username", {
+      const response = await fetch(process.env.REACT_APP_SERVER_URL + ":" + process.env.REACT_APP_SERVER_PORT + "/users/get-username", {
           method: "GET",
           headers: { token: localStorage.token }
       })

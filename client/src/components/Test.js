@@ -26,6 +26,8 @@ function Example() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+       <h2>This is the last line before PaypalComponent.</h2>
       <PaypalComponent></PaypalComponent>
     </>
   );

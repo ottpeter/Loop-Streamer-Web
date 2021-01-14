@@ -1,17 +1,18 @@
-import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR, SET_USERNAME, SET_PASSWORD, SET_PASSWORD_AGAIN } from '../actions/actionNames';
+import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR, SET_USERNAME, SET_PASSWORD, SET_PASSWORD_AGAIN, USER_ACTIVATED, CODE_INVALID } from '../actions/actionNames';
 
 const initialState = {
   init: null,
   serverError: false,
   paymentSuccessful: false,
   paymentStatus: null,
-  selectedProduct: null,
+  selectedProduct: "empty",
   email: null,
   email_again: null,
   password: null,
   password_again: null,
   userdata_error: false,
   username: null,
+  user_activated: false,
   products: [],
 }
 
@@ -71,6 +72,18 @@ const shopReducer = function (state = initialState, action) {
       return {
         ...state,
         userdata_error: action.payload.isError
+      }
+
+    case USER_ACTIVATED:
+      return {
+        ...state,
+        user_activated: true
+      }
+
+    case CODE_INVALID:
+      return {
+        ...state,
+        user_activated: false
       }
 
       default:

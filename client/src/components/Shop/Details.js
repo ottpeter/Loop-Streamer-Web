@@ -13,7 +13,8 @@ function Details ({selectedProduct, products}) {
   }
 
   function buy() {
-    history.push('/userinput');
+    // maybe here we could test if user is registered.
+    history.push('/register');
   }
 
   return (
