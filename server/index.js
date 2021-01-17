@@ -28,11 +28,10 @@ app.use(express.json());
 app.use('/users', require('./routes/userRoutes'));
 
 
-/** ...  */
-
 // PayPal routes
+app.use('/paypal', require('./routes/paypalRoutes'));
   //test only
-  app.use('/paypaltest', require('./routes/paypalTest'));
+  //app.use('/paypaltest', require('./routes/paypalTest'));
 
 
 var httpsServer = https.createServer(credentials, app);

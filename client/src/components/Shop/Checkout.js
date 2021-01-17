@@ -48,14 +48,14 @@ function Checkout({selectedProduct, products}) {
         </div>
         <div className="checkoutGrid-paymentOptions">
           <div className="checkoutGrid-Paypal">
-          <div id="paypal-button">something like that.</div>
+          <PayPalButton />
             {/*<PayPalButton 
               total={parseInt(products[selectedProduct].price)} history={history} 
               createOrder={(data, actions) => createOrder(data, actions)}
               onApprove={(data, actions) => onApprove(data, actions)}
             />*/}
           </div>
-          <div className="checkoutGrid-Card">Credit Card</div>
+          <div className="checkoutGrid-Card">Credit Card <p>coming soon...</p></div>
           <div className="checkoutGrid-Crypto"></div>
         </div>
       </div>

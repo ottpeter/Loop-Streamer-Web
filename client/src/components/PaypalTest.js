@@ -23,7 +23,7 @@ function PaypalComponent({init, products, selectedProduct}) {
             /** The first verison doesn't give response and price is not in request, 
              * the second gives respnse and there is price */
             //const res = actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment')
-            const res = await fetch('https://63-250-57-43.cloud-xip.io:5000/paypaltest/create-payment', requestOptions).then(response => response.json());
+            const res = await fetch(process.env.REACT_APP_SERVER_URL + ':' + process.env.REACT_APP_SERVER_PORT + '/paypaltest/create-payment', requestOptions).then(response => response.json());
             // 3. Return res.id from the response
             console.log("res.id: ", res.id);
             return res.id;
@@ -42,7 +42,7 @@ function PaypalComponent({init, products, selectedProduct}) {
               })
             };
             // 2. Make a request to your server
-            return fetch('https://63-250-57-43.cloud-xip.io:5000/paypaltest/execute-payment', requestOptions)
+            return fetch(process.env.REACT_APP_SERVER_URL + ':' + process.env.REACT_APP_SERVER_PORT + '/paypaltest/execute-payment', requestOptions)
             /*return actions.request.post('https://63-250-57-43.cloud-xip.io:5000/paypaltest/execute-payment', {
               paymentID: data.paymentID,
               payerID:   data.payerID

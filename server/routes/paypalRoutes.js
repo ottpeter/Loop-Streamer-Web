@@ -1,13 +1,15 @@
 const router = require("express").Router();
-const pool = require("../db");
-const bcrypt = require("bcrypt");
 const request = require("request");
-const jwtGenerator = require("../utils/jwtGenerator");
-const validinfo = require("../middleware/validinfo");
-const authorization = require("../middleware/authorization");
-require('dotenv').config()
+require('dotenv').config();
 
 
+// PayPal Credentials
+var CLIENT = process.env.PAYPAL_CLIENT;
+var SECRET = process.env.PAYPAL_SECRET;
+var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
+
+// Here we will first change the database entries (service active), then create the server
+// This will be moved to another file
 function exampleCall() {
   console.log("exampleCall function called!");
 
@@ -39,17 +41,6 @@ function exampleCall() {
 }
 
 
-
-// Add your credentials:
-// Add your client ID and secret
-// These will be in env
-var CLIENT =
-  'AahP0uPuabNc2rxw-3Grnsf8ncNchABTp6rPHnrEJ8FVuWw2_uoKY7b8uo-vejfPzfTyrY-0ldPJXAfQ';
-var SECRET =
-  'EGqhlqhZE_nk--JI2xGfxRxWf2vR4X5Ssj8pinZrFh3V-pCoeR2Ox7L8tfH45IoN1_pPf2bTPea1GnS1';
-var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
-
-
 // Create payment route
 router.post('/create-payment', async (req, res) => {
   console.log("Create payment route...");
@@ -76,6 +67,7 @@ router.post('/create-payment', async (req, res) => {
           currency: 'HUF'
         }
       }],
+      // We don't use this at the moment.
       redirect_urls:
       {
         return_url: 'https://example.com',
