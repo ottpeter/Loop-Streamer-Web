@@ -14,6 +14,12 @@ CREATE TABLE users (
 CREATE TABLE server_configs (
     server_id serial PRIMARY KEY,
     username varchar (16),
+    servername varchar (24),
+    datacenter varchar (8),
+    server_password varchar (32),
+    cpu varchar (4),
+    ram numeric,
+    disk_size numeric DEFAULT 10,
     home varchar (256),
     res_x numeric,
     res_y numeric,

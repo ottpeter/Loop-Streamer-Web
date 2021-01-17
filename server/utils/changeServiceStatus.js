@@ -1,13 +1,22 @@
 const pool = require("../db");
 const nodemailer = require("nodemailer");
+const updateServerEntry = require("./serverUtils");
 
 /**
  * This will be called on successfull payment.
  * Only 30 days is possible top-up, this might change in future. 
  * The prices are now hardwired (const prices).
  * */ 
-function changeServiceStatus(serviceLevel, userName) {
+async function changeServiceStatus(serviceLevel, userName) {
   try {
+    // If user does not pay for 1 day, server is deactivated, which means, data is stored, but VM is turned off. After a week, we completly delete the account. 
+    // User will need to pay for the 1 week (or less), so incrementing paid_until with 30 days is OK.
+    // After that perioud, there is no name collision, because the entry does not exist anymore in the database. (re-registering is possible)
+    let create = false;           // 'paid_until' can tell, if server is new, except if we reset that variable later.
+    const CPUs = ["1B","2B","4B"];        // CPU array, these are parameters that Kamatera recognizes
+    const RAMs = [512, 2048, 8192];       // RAM sizes
+    const disk_sizes = [10, 20, 40];      // Disk sizes in GB
+
 
     // Fetching the info for the user from the database. userInfo[0] == Undefined should throw error.
     const userInfo = await pool.query("SELECT * FROM users WHERE username = $1", [
@@ -15,43 +24,52 @@ function changeServiceStatus(serviceLevel, userName) {
     ]);
 
     // Check if user changed service lvl or not
-    if (userInfo[0].selected_service === serviceLevel) {
+    if (userInfo.rows[0].selected_service === serviceLevel) {
       // All good! Don't need to change service_level
-      // Calculate paidUntil
-      let paidUntil = null;
-      if (userInfo[0].paid_until === null) {
-        paidUntil = "CURRENT_TIMESTAMP + INTERVAL '30 day'";
+      if (userInfo.rows[0].paid_until === null) {
+        console.log("sericeLevel ===, paid_until is null");
+        create = true;
+        // Change database entry
+        const updateUser = await pool.query("UPDATE users SET service_active = TRUE, paid_until = (CURRENT_TIMESTAMP + INTERVAL '30 day') WHERE username = $1", 
+          [userName]
+        );
       } else {
-        paidUntil = userInfo[0].paid_until + " INTERVAL '30 day'";
+        console.log("sericeLevel ===, paid_until not null");
+        // Change database entry
+        const updateUser = await pool.query("UPDATE users SET service_active = TRUE, paid_until = (($1)::date + INTERVAL '30 day') WHERE username = $2", 
+          [userInfo.rows[0].paid_until, userName]
+        );
       }
-      // Change database entry
-      const updateUser = await pool.query("UPDATE users SET service_active = TRUE, paid_until = $1 WHERE username = $2", 
-        [paidUntil, userName]
-      );
 
-    } else if (userInfo[0].selected_service < serviceLevel) {
+    } else if (userInfo.rows[0].selected_service < serviceLevel) {
       // Need to change service_level
+      console.log("sericeLevel changed");
       
       // How many days are paid in previous serviceLevel?
       const paidBefore = await pool.query("SELECT CURRENT_TIMESTAMP - $1", [userInfo[0].paid_until]);
       // Prices of the different services in HUF
       const prices = [6000,9000,14000];
       // Ratio of the old and the new price
-      const ratio = (userInfo[0].selected_service / serviceLevel);
-      // New paid_until
-      //const paidUntil = (paidBefore*ratio)
-
-      const updateUser = await pool.query("UPDATE users SET service_active = TRUE, paid_until = ($1 * $2) + INTERVAL '30 day' WHERE username = $3", 
+      const ratio = (prices[userInfo.rows[0].selected_service] / prices[serviceLevel]);
+      console.log("price ratio: ", ratio);
+      // Change database entry
+      const updateUser = await pool.query("UPDATE users SET service_active = TRUE, paid_until = ((($1)::date * $2) + INTERVAL '30 day') WHERE username = $3", 
         [paidBefore, ratio, userName]
       );
       console.log("updateUser: ", updateUser);
+
+      let cpu = CPUs[serviceLevel];
+      let ram = RAMs[serviceLevel];
+      let disk_size = disk_sizes[serviceLevel];
+      // Update the server entry in server_configs table
+      updateServerEntry(create, userName, "EU", cpu, ram, disk_size);     // !! We don't know if server exists or not.
 
     } else {
       throw "serviceLevel is not greater or equal then current selected_serive.";
     }
     
   } catch (err) {
-    console.error("Error while trying to change service status");
+    console.error("Error while trying to change service status: ", err);
     // Send e-mail to admin
     sendMailToAdmin("error");
   }
@@ -61,18 +79,5 @@ function sendMailToAdmin(errorObjectOrSomethingLikeThat) {
   /**TODO */
   console.error(errorObjectOrSomethingLikeThat);
 }
-
-
-// Let's suppose that someone paid 5 months, small:
-// 6000 + 6000 + 6000 + 6000 + 6000 = 30000
-// With that, he would have service active until 06-16
-// Now he updates to large, meaning he pays 14000
-// That updates paid_until to 07-16 and he paid 44000, that's not good, because he should have paid 84000
-// To solve this
-// We need to take current service level (0)
-// How many days he paid before? (150)
-// (small/large) ratio (0.42)
-// paid_until = (paid_before*ratio) + paid_now
-// service will be active until 04-19
 
 module.exports = changeServiceStatus;

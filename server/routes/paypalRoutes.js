@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const request = require("request");
 const changeServiceStatus = require("../utils/changeServiceStatus");
+const createServer = require("../utils/createServer");
 require('dotenv').config();
 
 
@@ -8,39 +9,6 @@ require('dotenv').config();
 var CLIENT = process.env.PAYPAL_CLIENT;
 var SECRET = process.env.PAYPAL_SECRET;
 var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
-
-// Here we will first change the database entries (service active), then create the server
-// This will be moved to another file
-function exampleCall(userName) {
-  console.log("exampleCall function called!");
-
-  // Test server creation
-
-  const testOptions = {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'AuthClientId': 'a759573dab2e33880e3b5f5492a8a227',
-      'AuthSecret': 'bbae6d1ba15fe6444786bec36839c84c'
-    },
-    body: JSON.stringify({
-      "datacenter": "EU",
-      "name": "api_server_demo_basic",
-      "password": "pass123qZ#1234",
-      "cpu": "1B",
-      "ram": "512",
-      "billing": "hourly",
-      "disk_size_0": "10",
-      "disk_src_0": "EU:6000C298f8b5c5ff2c2aa9e46ac0d80c",
-      "network_name_0": "wan"
-    })
-  }
-  /*const testRes = request.post('https://console.kamatera.com/service/server', testOptions, function(err, response) {
-    console.log("Error: ", err);
-    console.log("Kamatera: ", response);
-  });*/
-  console.log(userName);
-}
 
 
 // Create payment route
@@ -137,7 +105,6 @@ router.post('/execute-payment', async (req, res) => {
       });
     });
   console.log("Execute route ended.");
-  exampleCall(req.body.username);
   changeServiceStatus(req.body.selectedProduct, req.body.username);
 });
 

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { LOGOUT } from '../../actions/actionNames';
 
 function Verify({user_activated, dispatch}) {
   let { hash } = useParams();
@@ -15,6 +16,7 @@ function Verify({user_activated, dispatch}) {
 
   useEffect(() => {
     dispatch(verifyAccount(hash));
+    // This didnt' solve the problem; dispatch({type: LOGOUT});
     return () => {
       console.log("'cleanup'");
     }
