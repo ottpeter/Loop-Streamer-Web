@@ -10,7 +10,7 @@ function Checkout({selectedProduct, products}) {
   const history = useHistory();
   
   // INSERT PAYPAL FUNCTION HERE
-
+/*
   function createOrder(data, actions) {
     // 2. Make a request to your server
     console.log("data(payment): ", data);
@@ -34,7 +34,7 @@ function Checkout({selectedProduct, products}) {
         // 3. Show the buyer a confirmation message.
       });
   }
-
+*/
 
 
 

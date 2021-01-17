@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const request = require("request");
+const changeServiceStatus = require("../utils/changeServiceStatus");
 require('dotenv').config();
 
 
@@ -10,7 +11,7 @@ var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
 
 // Here we will first change the database entries (service active), then create the server
 // This will be moved to another file
-function exampleCall() {
+function exampleCall(userName) {
   console.log("exampleCall function called!");
 
   // Test server creation
@@ -34,10 +35,11 @@ function exampleCall() {
       "network_name_0": "wan"
     })
   }
-  const testRes = request.post('https://console.kamatera.com/service/server', testOptions, function(err, response) {
+  /*const testRes = request.post('https://console.kamatera.com/service/server', testOptions, function(err, response) {
     console.log("Error: ", err);
     console.log("Kamatera: ", response);
-  });
+  });*/
+  console.log(userName);
 }
 
 
@@ -135,7 +137,8 @@ router.post('/execute-payment', async (req, res) => {
       });
     });
   console.log("Execute route ended.");
-  exampleCall();
+  exampleCall(req.body.username);
+  changeServiceStatus(req.body.selectedProduct, req.body.username);
 });
 
 module.exports = router;

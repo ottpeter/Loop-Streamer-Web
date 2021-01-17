@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { selectProduct } from '../../actions/shopActions';
 
-function PaypalComponent({init, products, selectedProduct}) {
+function PaypalComponent({init, products, selectedProduct, username}) {
     useEffect(()=> {
       // Only load the button, if the products are already loaded into the Redux Store
       if (products[0]) {
@@ -30,12 +30,15 @@ function PaypalComponent({init, products, selectedProduct}) {
           onAuthorize: function(data, actions) {
             console.log("data.paymentID: ", data.paymentID);
             console.log("data.payerID: ", data.payerID);
+            console.log("board username: ", username);
             const requestOptions = {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ 
                 paymentID: data.paymentID,
-                payerID:   data.payerID 
+                payerID:   data.payerID,
+                username: username,
+                selectedProduct: selectedProduct
               })
             };
             // 2. Make a request to your server
@@ -61,6 +64,7 @@ function PaypalComponent({init, products, selectedProduct}) {
 const mapStateToProps = state => ({
   selectedProduct: state.shop.selectedProduct,
   products: state.shop.products,
+  username: state.board.username
 });
 
 export default connect(mapStateToProps)(PaypalComponent)

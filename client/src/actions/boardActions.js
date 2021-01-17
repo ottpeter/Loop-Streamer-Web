@@ -29,7 +29,7 @@ export const LoginRequest = (username, password) => async (dispatch) => {
     if (parseRes.token) {
       //set cookie
       localStorage.setItem("token", parseRes.token);
-      dispatch(userLogin());
+      dispatch(userLogin(username));
       return "SUCCESS"
     } else {
       dispatch({type: LOGOUT});
