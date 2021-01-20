@@ -20,23 +20,23 @@ async function updateServerEntry(create, username, datacenter, cpu, ram, disk_si
   try {
     const servername = "streamer_" + username;
     // Check if entry already exists
-    const exist = await pool.query("SELECT * FROM server_configs WHERE servername = $", [servername]);
+    const exist = await pool.query("SELECT * FROM server_configs WHERE servername = $1", [servername]);
     if (exist.rows.length === 1) {
       console.log("The server entry exists.");
       if (create) throw "There is already a server registered with this name.";
+      // Modify entry in database
+      const entry = await pool.query("UPDATE server_configs SET datacenter = $1, cpu = $2, ram = $3, disk_size = $4 WHERE servername = $5", 
+      [datacenter, cpu, ram, disk_size, servername]
+      );
+      console.log(entry, " Database entry modified.");
+    } else {
+      console.log("The server entry does not exists.")
+      if (!create) throw "This server does not exist in our database.";
       // Create new entry in database
       const entry = await pool.query("INSERT INTO server_configs (username, servername, datacenter, server_password, cpu, ram, disk_size) VALUES ($1, $2, $3, $4, $5, $6, $7)", 
         [username, servername, datacenter, "pw", cpu, ram, disk_size]
       );
       console.log(entry, " Entry added to database.");
-    } else {
-      console.log("The server entry does not exists.")
-      if (!create) throw "This server does not exist in our database.";
-      // Modify entry in database
-      const entry = await pool.query("UPDATE server_configs SET datacenter = $1, cpu = $2, ram = $3, disk_size = $4 WHERE servername = $5", 
-        [datacenter, cpu, ram, disk_size, servername]
-      );
-      console.log(entry, " Database entry modified.");
     }
     
   } catch (error) {

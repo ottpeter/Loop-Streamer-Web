@@ -1,4 +1,5 @@
-import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR, SET_USERNAME, SET_PASSWORD, SET_PASSWORD_AGAIN, USER_ACTIVATED, CODE_INVALID } from './actionNames';
+import { INIT, SELECT, SET_PAYMENT_STATUS, SET_EMAIL, SET_EMAIL_AGAIN, SET_USERDATA_ERROR, SET_USERNAME, SET_PASSWORD, SET_PASSWORD_AGAIN, USER_ACTIVATED, CODE_INVALID, LOGOUT } from './actionNames';
+import { isAuth, setLoginNameField } from './boardActions';
 // Server URL is stored in .env
 // With REACT_APP_ prefix we don't need dotenv, because we use create-react-app
 //require('dotenv').config();
@@ -88,6 +89,13 @@ export const createAccount = (email, username, password, selected_service) => as
 // Verify hash (Activate user)
 export const verifyAccount = (hash) => async (dispatch) => {
   try {
+    // Log out user, if logged in, and destroy JWT token.
+    console.log("Removing JWT token!");
+    localStorage.removeItem("token");
+    //dispatch({type: LOGOUT});
+    await dispatch(isAuth());
+
+    // Check if the activation hash is valid
     const response = await fetch(process.env.REACT_APP_SERVER_URL + ":" + process.env.REACT_APP_SERVER_PORT + "/users/verify/" + hash, {
       method: "GET"
     });
@@ -95,9 +103,9 @@ export const verifyAccount = (hash) => async (dispatch) => {
     if (parseRes.hasOwnProperty("username")) {
       console.log("Account activated!");
       dispatch({type: USER_ACTIVATED});
-      dispatch(setUsername(parseRes.username));
+      dispatch(setLoginNameField(parseRes.username));                               // Set username for login 
       console.log("parseRes.selectedProduct: ", parseRes.selectedProduct)
-      dispatch(selectProduct(parseRes.selectedProduct));
+      dispatch(selectProduct(parseRes.selectedProduct));                            // This is needed for the payment
     } else {
       console.log("Activation link not valid.");
       dispatch({type: CODE_INVALID});

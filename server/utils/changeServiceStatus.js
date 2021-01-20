@@ -56,17 +56,15 @@ async function changeServiceStatus(serviceLevel, userName) {
       const updateUser = await pool.query("UPDATE users SET service_active = TRUE, paid_until = ((($1)::date * $2) + INTERVAL '30 day') WHERE username = $3", 
         [paidBefore, ratio, userName]
       );
-      console.log("updateUser: ", updateUser);
-
-      let cpu = CPUs[serviceLevel];
-      let ram = RAMs[serviceLevel];
-      let disk_size = disk_sizes[serviceLevel];
-      // Update the server entry in server_configs table
-      updateServerEntry(create, userName, "EU", cpu, ram, disk_size);     // !! We don't know if server exists or not.
-
+      console.log("updateUser: ", updateUser);  
     } else {
       throw "serviceLevel is not greater or equal then current selected_serive.";
     }
+    let cpu = CPUs[serviceLevel];
+    let ram = RAMs[serviceLevel];
+    let disk_size = disk_sizes[serviceLevel];
+    // Update the server entry in server_configs table
+    updateServerEntry(create, userName, "EU", cpu, ram, disk_size);
     
   } catch (err) {
     console.error("Error while trying to change service status: ", err);

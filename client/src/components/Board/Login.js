@@ -1,18 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer'
 import { setLoginNameField, setPasswordField, LoginRequest } from '../../actions/boardActions';
 
 function Login({dispatch, isLoggedIn, username, shopUsername, password}) {
-  useEffect(() => {
-    if (shopUsername !== null) dispatch(setLoginNameField(shopUsername));
-    return () => {
-      console.log("setting username done");
-    }
-  }, []);
 
   const onChangeNameField = e => {
     dispatch(setLoginNameField(e.target.value));

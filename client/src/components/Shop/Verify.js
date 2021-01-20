@@ -9,16 +9,18 @@ import { FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LOGOUT } from '../../actions/actionNames';
+import { setLoginNameField } from '../../actions/boardActions';
 
-function Verify({user_activated, dispatch}) {
+function Verify({user_activated, dispatch, uname, lg}) {
   let { hash } = useParams();
   const history = useHistory();
 
   useEffect(() => {
     dispatch(verifyAccount(hash));
-    // This didnt' solve the problem; dispatch({type: LOGOUT});
     return () => {
       console.log("'cleanup'");
+      console.log("username: ", uname);
+      console.log("logged in: ", lg);
     }
   }, []);
 
@@ -43,7 +45,9 @@ function Verify({user_activated, dispatch}) {
 }
 
 const mapStateToProps = state => ({
-  user_activated: state.shop.user_activated
+  user_activated: state.shop.user_activated,
+  uname: state.board.username,
+  lg: state.board.isLoggedIn
 });
 
 export default connect(mapStateToProps)(Verify);

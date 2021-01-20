@@ -35,6 +35,7 @@ class App extends React.Component {
   // Init
   componentDidMount() {
     this.props.dispatch(init());
+    console.log("Now isAuth() is running in App.js (componentDidMount())");
     this.props.dispatch(isAuth());
   }
 
