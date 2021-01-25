@@ -5,7 +5,7 @@ const pool = require("../db");
 
 
 async function createServer(userName) {
-  console.log("exampleCall function called!");
+  console.log("createServer function called!");
 
   // Test server creation
 
@@ -28,11 +28,11 @@ async function createServer(userName) {
       "network_name_0": "wan"
     })
   }
-  /*const testRes = request.post('https://console.kamatera.com/service/server', testOptions, function(err, response) {
+  const testRes = request.post('https://console.kamatera.com/service/server', testOptions, function(err, response) {
     console.log("Error: ", err);
     console.log("Kamatera: ", response);
-  });*/
-  console.log(userName);
+  });
+  console.log("(createServer) userName: ", userName);
 }
 
 module.exports = createServer;

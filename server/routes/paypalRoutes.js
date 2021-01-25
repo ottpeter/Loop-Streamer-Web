@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const request = require("request");
+//const { updateServerEntry, refreshServerDatabase, executeServerDatabase} = require("./serverUtils");
 const changeServiceStatus = require("../utils/changeServiceStatus");
-const createServer = require("../utils/createServer");
+const serverUtils = require("../utils/serverUtils");
 require('dotenv').config();
 
 
@@ -105,7 +106,10 @@ router.post('/execute-payment', async (req, res) => {
       });
     });
   console.log("Execute route ended.");
-  changeServiceStatus(req.body.selectedProduct, req.body.username);
+  // This function will change service status in users database
+  const serverObj = await changeServiceStatus(req.body.selectedProduct, req.body.username);
+  await serverUtils.updateServerEntry(serverObj.create, serverObj.userName, serverObj.data_center, serverObj.cpu, serverObj.ram, serverObj.disk_size);
+  await serverUtils.executeServerDatabase();
 });
 
 module.exports = router;

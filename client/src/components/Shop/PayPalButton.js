@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
-import { selectProduct } from '../../actions/shopActions';
+import { useHistory } from 'react-router-dom';
+import { selectProduct, setStatus } from '../../actions/shopActions';
 
-function PaypalComponent({init, products, selectedProduct, username}) {
+function PaypalComponent({init, products, selectedProduct, username, dispatch}) {
+    const history = useHistory();
+
     useEffect(()=> {
       // Only load the button, if the products are already loaded into the Redux Store
       if (products[0]) {
@@ -44,9 +47,12 @@ function PaypalComponent({init, products, selectedProduct, username}) {
             // 2. Make a request to your server
             return fetch(process.env.REACT_APP_SERVER_URL + ':' + process.env.REACT_APP_SERVER_PORT + '/paypal/execute-payment', requestOptions)
               .then(function(res) {
-                // 3. Show the buyer a confirmation message.
-                // here we will do redirect and stuff like that.
-                alert("payment got successful");
+                // Payment was successfull
+                dispatch(setStatus("SUCCESS", true));
+                history.push('/done');
+              }).catch(function(res) {
+                dispatch(setStatus("ERROR", false));                
+                history.push('/done');  
               });
           }
         }, '#paypal-button');

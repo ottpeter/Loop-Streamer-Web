@@ -1,6 +1,7 @@
 const pool = require("../db");
 const nodemailer = require("nodemailer");
-const updateServerEntry = require("./serverUtils");
+//const serverUtils = require("./serverUtils");
+
 
 /**
  * This will be called on successfull payment.
@@ -63,8 +64,19 @@ async function changeServiceStatus(serviceLevel, userName) {
     let cpu = CPUs[serviceLevel];
     let ram = RAMs[serviceLevel];
     let disk_size = disk_sizes[serviceLevel];
+    return {
+      create: create, 
+      userName: userName, 
+      data_center: "EU", 
+      cpu: cpu, 
+      ram: ram, 
+      disk_size: disk_size
+    }
     // Update the server entry in server_configs table
-    updateServerEntry(create, userName, "EU", cpu, ram, disk_size);
+    serverUtils.updateServerEntry(create, userName, "EU", cpu, ram, disk_size);
+    // Create new servers according to server_configs table
+    serverUtils.executeServerDatabase();
+    
     
   } catch (err) {
     console.error("Error while trying to change service status: ", err);

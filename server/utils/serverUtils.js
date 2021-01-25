@@ -18,11 +18,12 @@ require('dotenv').config();
  */
 async function updateServerEntry(create, username, datacenter, cpu, ram, disk_size) {
   try {
+    console.log("updateServerEntry");
     const servername = "streamer_" + username;
     // Check if entry already exists
     const exist = await pool.query("SELECT * FROM server_configs WHERE servername = $1", [servername]);
     if (exist.rows.length === 1) {
-      console.log("The server entry exists.");
+      console.log("INFO: The server entry exists.");
       if (create) throw "There is already a server registered with this name.";
       // Modify entry in database
       const entry = await pool.query("UPDATE server_configs SET datacenter = $1, cpu = $2, ram = $3, disk_size = $4 WHERE servername = $5", 
@@ -30,7 +31,7 @@ async function updateServerEntry(create, username, datacenter, cpu, ram, disk_si
       );
       console.log(entry, " Database entry modified.");
     } else {
-      console.log("The server entry does not exists.")
+      console.log("INFO: The server entry does not exists.")
       if (!create) throw "This server does not exist in our database.";
       // Create new entry in database
       const entry = await pool.query("INSERT INTO server_configs (username, servername, datacenter, server_password, cpu, ram, disk_size) VALUES ($1, $2, $3, $4, $5, $6, $7)", 
@@ -48,16 +49,35 @@ async function updateServerEntry(create, username, datacenter, cpu, ram, disk_si
 
 /** Updates all server entries in server_configs table, based on users table */
 async function refreshServerDatabase() {
-
+  try {
+    console.log("refreshServerDatabase");
+  } catch (error) {
+    console.error("Error: ", error);
+    // possibly send e-mail here.
+  }
 }
 
 
 /** Create, delete or suspend servers, according to server_configs table
  *  The config files for Loop-Streamer will be handled in different functions. */
 async function executeServerDatabase() {
-
+  try {
+    console.log("executeServerDatabase");
+    if ("TEST_CREATE") {
+      console.log("Creating server...");
+    } else {
+      console.log("This would create server, but in testing mode it does not.");
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+  }
 }
 
-module.exports = updateServerEntry, refreshServerDatabase, executeServerDatabase;
+// createServer???
+
+//module.exports = updateServerEntry, refreshServerDatabase, executeServerDatabase;
+exports.updateServerEntry = updateServerEntry;
+exports.refreshServerDatabase = refreshServerDatabase;
+exports.executeServerDatabase = executeServerDatabase;
 
 // server_created, turned_on  database variables need to exist
