@@ -7,15 +7,7 @@ import { connect } from 'react-redux';
 
 
 function ErrorMessage({error, dispatch}) {
-  const [show, setShow] = React.useState(false);
-
-  //const handleClose = () => setShow(false);
-  const handleClose = () => dispatch(setUserError(false));;
-  const handleShow = () => setShow(true);
-
-  function x() {
-    console.log("x");
-  }
+  const handleClose = () => dispatch(setUserError(false));
 
   return (
     <>

@@ -8,6 +8,9 @@ var credentials = { key: privKey, cert: certificate };
 const express = require('express');
 var app = express();
 const pool = require('./db');
+const { getInfo } = require('./utils/serverUtils');
+const router = require('./routes/userRoutes');
+
 
 //test.serviceHandler("test", "nothing");
 
@@ -33,6 +36,7 @@ app.use('/paypal', require('./routes/paypalRoutes'));
   //test only
   //app.use('/paypaltest', require('./routes/paypalTest'));
 
+getInfo()
 
 var httpsServer = https.createServer(credentials, app);
 

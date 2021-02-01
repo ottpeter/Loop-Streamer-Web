@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { selectProduct, setStatus } from '../../actions/shopActions';
+import { setStatus } from '../../actions/shopActions';
 
 function PaypalComponent({init, products, selectedProduct, username, dispatch}) {
     const history = useHistory();
@@ -59,7 +59,6 @@ function PaypalComponent({init, products, selectedProduct, username, dispatch}) 
       }
     }, [products]);
 
-    //if (!products[0]) console.log("Waiting products");
 
     // Render the button
     return (

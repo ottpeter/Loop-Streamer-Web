@@ -13,7 +13,8 @@ function Details ({selectedProduct, products}) {
   }
 
   function buy() {
-    // maybe here we could test if user is registered.
+    // maybe here we could test if user is registered. 
+    //This make sense if we can redirect here from AccountBoard(component that is shown to already registered user)
     history.push('/register');
   }
 

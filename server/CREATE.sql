@@ -40,5 +40,7 @@ CREATE TABLE server_configs (
     music_list_file_path varchar (256),
     main_settings varchar(256),
     mp3_path varchar (256),
-    repeat_num numeric
+    repeat_num numeric,
+    server_exists boolean DEFAULT FALSE,
+    server_turned_on boolean DEFAULT FALSE
 );

@@ -9,9 +9,9 @@ function Done({success, status, dispatch}) {
   useEffect(() => {
     // Clear the selected product
     dispatch(selectProduct("empty"));
-    return () => {
+    /*return () => {
       // nothing
-    }
+    }*/
   }, [])
   
   return (

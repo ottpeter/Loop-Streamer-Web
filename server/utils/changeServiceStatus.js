@@ -72,10 +72,6 @@ async function changeServiceStatus(serviceLevel, userName) {
       ram: ram, 
       disk_size: disk_size
     }
-    // Update the server entry in server_configs table
-    serverUtils.updateServerEntry(create, userName, "EU", cpu, ram, disk_size);
-    // Create new servers according to server_configs table
-    serverUtils.executeServerDatabase();
     
     
   } catch (err) {
