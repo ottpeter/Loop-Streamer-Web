@@ -1,0 +1,17 @@
+[Unit]
+Description=Daemon for the instance, that is communicating with the Loop-Streamer-Web server
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+User=root
+ExecStartPre=
+ExecStart=/root/instance/instance.sh
+ExecStartPost=
+ExecStop=
+ExecReload=
+
+[Install]
+WantedBy=multi-user.target

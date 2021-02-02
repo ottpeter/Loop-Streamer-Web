@@ -10,6 +10,7 @@ var app = express();
 const pool = require('./db');
 const { getInfo } = require('./utils/serverUtils');
 const router = require('./routes/userRoutes');
+const request = require('request');
 
 
 //test.serviceHandler("test", "nothing");
@@ -36,7 +37,11 @@ app.use('/paypal', require('./routes/paypalRoutes'));
   //test only
   //app.use('/paypaltest', require('./routes/paypalTest'));
 
-getInfo()
+// Instance routes (called from the direction of the instance)
+app.use('/instance', require('./routes/instanceRoutes'));
+
+// Test routes
+app.use('/tests', require('./routes/testRoutes'));
 
 var httpsServer = https.createServer(credentials, app);
 

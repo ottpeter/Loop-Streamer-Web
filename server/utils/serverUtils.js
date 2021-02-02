@@ -1,6 +1,8 @@
 const pool = require("../db");
 require('dotenv').config();
 const request = require("request");
+const fetch = require('node-fetch');
+const { response } = require("express");
 
 /** 
  * These functions handle server creation, deletion and modification, 
@@ -80,21 +82,26 @@ async function executeServerDatabase() {
         console.log("There is no server_config entry for this user.");
       } else {
         // If server should exist according to the table, and it exists, console.log it exists
-        /*DEBUG*/if (users.rows[i].service_active && server.rows[0].server_exists) console.log("Server " + server.rows[0].servername + " exists");
+        /*DEBUG*///if (users.rows[i].service_active && server.rows[0].server_exists) console.log("Server " + server.rows[0].servername + " exists");
 
         // If server should exist according to the table, but does not exist, create it
         if (users.rows[i].service_active && !server.rows[0].server_exists) {
           /* DEBUG-only*/if (server.rows[0].servername.indexOf("test_create") !== -1) {
-            console.log("The server " + server.rows[0].servername + " would be created.");
             createServer(server.rows[0].servername, "EU", server.rows[0].cpu, server.rows[0].ram, server.rows[0].disk_size);
           } else {
             console.log("This would create server, but in testing mode it does not.");
           }
+        }
 
+        // If server exists, should be turned on according to the table, but is not turned on, turn it on
+        if (users.rows[i].service_active && server.rows[0].server_exists && !server.rows[0].server_turned_on) {
+          startServer(server.rows[0].servername);
+        }
         // If server is not paid (inside 1 week), shut down the server
+        //shutdownServer(server.rows[0].servername);
 
-        // If server is not paid (outside 1 week), delete the server
-      }
+        // If server is not paid (outside 1 week), delete the server (probably we should delete the user as well)
+        //terminateAccount()
 
       }
     }
@@ -127,7 +134,9 @@ async function createServer(serverName, dataCenter, cpu, ram, diskSize) {
     return -1;
   }
 
+  // Credentials and server configs
   const serverOptions = {
+    url: 'https://console.kamatera.com/service/server',
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -142,16 +151,20 @@ async function createServer(serverName, dataCenter, cpu, ram, diskSize) {
       "ram": ram,
       "billing": "hourly",
       "disk_size_0": diskSize,
-      "disk_src_0": "EU:6000C298f8b5c5ff2c2aa9e46ac0d80c",
+      "disk_src_0": process.env.loopdisk,
       "network_name_0": "wan"
     })
   }
-  const Res = request.post('https://console.kamatera.com/service/server', serverOptions, async function(err, response) {
-    console.log("Error: ", err);
-    console.log("Kamatera: ", response);
+  // Kamatera will try to create the server
+  const Res = request.post(serverOptions, async function(err, response) {
+    console.log("statusCode: ", response.statusCode);
+    console.log("Kamatera: ", response.body);
     // If there was no error, change server_exists to TRUE
-    if (err === null) {
+    if (response.statusCode === 200) {
       const changeStatus = await pool.query("UPDATE server_configs SET server_exists = TRUE WHERE servername = $1", [serverName]);                        
+    } else {
+      console.error("There was an error creating the server");
+      console.error(err);
     }
   });
   console.log("(createServer) userName: ", serverName);
@@ -169,7 +182,7 @@ async function upgradeServer() {
  * Deletes a server
  * Given server will be deleted.
  */
-async function deleteServer() {
+async function deleteServer(serverName) {
 
 }
 
@@ -177,16 +190,116 @@ async function deleteServer() {
  * Powers off a server
  * The server will be suspended, disk space will be billed.
  */
-async function shutdownServer() {
-
+async function shutdownServer(serverName) {
+  let serverID = await getServerId(serverName);
+  if (serverID === -1) {
+    console.error("(stopServer) We couldn't find that server");
+    return -1;
+  }
+  // Credentials and server configs
+  const serverOptions = {
+    url: "https://console.kamatera.com/service/server/" + serverID + "/power",
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'AuthClientId': process.env.KAMATERA_AUTH_ID,
+      'AuthSecret': process.env.KAMATERA_AUTH_SECRET
+    },
+    body: JSON.stringify({
+      "power": "off"
+    })
+  }  
+  request.put(serverOptions, async function(err, response) {
+    // If there was no error, change server_turned_on to FALSE
+    if (response.statusCode === 200) {
+      const changeStatus = await pool.query("UPDATE server_configs SET server_turned_on = FALSE WHERE servername = $1", [serverName]);
+      console.log("The server " + serverName + " was turned on.")
+    } else {
+      console.error("The server couldn't be turned off.");
+      console.error(err);
+      return -2;
+    }
+  });
 }
 
 /**
  * Powers on a server
  * The server will be started and it will start streaming.
  */
-async function startServer() {
+async function startServer(serverName) {
+  let serverID = await getServerId(serverName);
+  if (serverID === -1) {
+    console.error("(startServer) We couldn't find that server");
+    return -1;
+  }
+  // Credentials and server configs
+  const serverOptions = {
+    url: "https://console.kamatera.com/service/server/" + serverID + "/power",
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'AuthClientId': process.env.KAMATERA_AUTH_ID,
+      'AuthSecret': process.env.KAMATERA_AUTH_SECRET
+    },
+    body: JSON.stringify({
+      "power": "on"
+    })
+  } 
+  request.put(serverOptions, async function(err, response) {
+    console.log("statusCode: ", response.statusCode);
+    console.log("Kamatera: ", response.body);
+    // If there was no error, change server_turned_on to TRUE
+    if (response.statusCode === 200) {
+      const changeStatus = await pool.query("UPDATE server_configs SET server_turned_on = TRUE WHERE servername = $1", [serverName]);
+      console.log("The server " + serverName + "was turned on.")
+      // Tell the server to start streaming
+    } else {
+      // There is error "Server is already powered on.", so we shouldn't change server_turned_on to FALSE. But it always has code 7.
+      console.error("The server couldn't be turned on.");
+      console.error(err);
+      return -2;
+    }
+  });
+}
 
+async function getServerId(serverName) {
+  let returnVal = -1;                                                               //If not found, return -1
+  // Credentials and server configs
+  const serverOptions = {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      'AuthClientId': process.env.KAMATERA_AUTH_ID,
+      'AuthSecret': process.env.KAMATERA_AUTH_SECRET
+    }
+  }
+  await fetch("https://console.kamatera.com/service/servers", serverOptions)
+  .then((response) => response.json())
+  .then((res) => {
+    for (let i = 0; i < res.length; i++) {
+      if (res[i].name === serverName)
+        returnVal = res[i].id;
+    }
+  })
+  .catch((error) => {
+    console.error("There was an error during the server list fetch: ", error);
+  })
+  return returnVal;
+}
+
+function cleanUpString(inputS) {
+  // preserve newlines, etc - use valid JSON
+  inputS = inputS.replace(/\\n/g, "\\n")  
+  .replace(/\\'/g, "\\'")
+  .replace(/\\"/g, '\\"')
+  .replace(/\\&/g, "\\&")
+  .replace(/\\r/g, "\\r")
+  .replace(/\\t/g, "\\t")
+  .replace(/\\b/g, "\\b")
+  .replace(/\\f/g, "\\f");
+  // remove non-printable and other non-valid JSON chars
+  inputS = inputS.replace(/[\u0000-\u0019]+/g,""); 
+ return inputS;
 }
 
 //module.exports = updateServerEntry, refreshServerDatabase, executeServerDatabase;
