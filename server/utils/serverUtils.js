@@ -68,6 +68,7 @@ async function executeServerDatabase() {
     console.log("executeServerDatabase");
     // Fetch the server_configs array (we will handle all the entries in memory)
     const users = await pool.query("SELECT * FROM users");
+    const [now, oneWeekAgo] = getTimes();
     
     
     // Go through the array that represents the 'users' database
@@ -97,11 +98,26 @@ async function executeServerDatabase() {
         if (users.rows[i].service_active && server.rows[0].server_exists && !server.rows[0].server_turned_on) {
           startServer(server.rows[0].servername);
         }
+
+        // If server should be upgraded according to the table
+        if (users.rows[i].upgrade_needed) {
+          console.log("Upgrading ", server.rows[0].servername)
+          shutdownServer(server.rows[0].servername);
+          upgradeServer(server.rows[0].servername);
+          startServer(server.rows[0].servername);
+        }
+
         // If server is not paid (inside 1 week), shut down the server
-        //shutdownServer(server.rows[0].servername);
+        /**DEBUG console.log("Date(users.rows[i].paid_until)", new Date(users.rows[i].paid_until));console.log("now", now);console.log("Date(users.rows[i].paid_until)", new Date(users.rows[i].paid_until));console.log("oneWeekAgo", oneWeekAgo);console.log("Logical value: ", new Date(users.rows[i].paid_until) > now)*/
+        if (new Date(users.rows[i].paid_until) < now && new Date(users.rows[i].paid_until) > oneWeekAgo) {
+          console.log("SHUTDOWN SERVER: ", server.rows[0].servername)
+          shutdownServer(server.rows[0].servername);
+        }
 
         // If server is not paid (outside 1 week), delete the server (probably we should delete the user as well)
-        //terminateAccount()
+        if (new Date(users.rows[i].paid_until) < oneWeekAgo) {
+          terminateAccount(users.rows[0].username);
+        }
 
       }
     }
@@ -174,8 +190,20 @@ async function createServer(serverName, dataCenter, cpu, ram, diskSize) {
  * Shuts down, upgrades and restart a server.
  * Parameters are always going up, downgrade is not possible.
  */
-async function upgradeServer() {
+async function upgradeServer(serverName, cpu, ram, disksize) {
+  let serverID = await getServerId(serverName);
+  if (serverID === -1) {
+    console.error("(startServer) We couldn't find that server");
+    return -1;
+  }
+  // Change CPU
+  sendChangeRequest("cpu", cpu);
 
+  // Change RAM
+  sendChangeRequest("ram", ram);
+
+  // Change Disk Space
+  sendChangeRequest("disk", disksize);
 }
 
 /**
@@ -183,14 +211,57 @@ async function upgradeServer() {
  * Given server will be deleted.
  */
 async function deleteServer(serverName) {
-
+  let serverID = await getServerId(serverName);
+  if (serverID === -1) {
+    console.error("(stopServer) We couldn't find that server");
+    return -1;
+  }
+  // Credentials and server configs
+  const serverOptions = {
+    url: "https://console.kamatera.com/service/server/" + serverID + "/power",
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'AuthClientId': process.env.KAMATERA_AUTH_ID,
+      'AuthSecret': process.env.KAMATERA_AUTH_SECRET
+    },
+    body: JSON.stringify({
+      "confirm": 1,
+      "force": 1
+    })
+  }
+  request.delete(serverOptions, async function(err, response) {
+    // If there was no error, change server_turned_on to FALSE
+    if (response.statusCode === 200) {
+      const changeStatus = await pool.query("UPDATE server_configs SET server_turned_on = FALSE, SET server_exists = FALSE WHERE servername = $1", [serverName]);
+      console.log("The server " + serverName + " deleted.")
+    } else {
+      console.error("The server couldn't be deleted.");
+      console.error(err);
+      return -2;
+    }
+  });    
 }
+async function terminateAccount(userName) {
+  // PROBABLY WE SHOULD MOVE THIS TO accountUtils
+
+  const server =  await pool.query("SELECT * FROM server_configs WHERE username = $1", [userName]);
+  if (server.rows.length === 0) {
+    console.error("(terminateAccount) This entry does not exist in the database.");
+  } else {
+    await deleteServer(server.rows[0].servername);                                                          // Possible async problem
+    const deleteUserEntry = await pool.query("DELETE FROM users WHERE username = $1", [userName]);
+    const deleteServerEntry = await pool.query("DELETE FROM server_configs WHERE username = $1", [userName]);
+  }
+}
+
 
 /**
  * Powers off a server
  * The server will be suspended, disk space will be billed.
  */
 async function shutdownServer(serverName) {
+  console.log("Shutting down server ...");
   let serverID = await getServerId(serverName);
   if (serverID === -1) {
     console.error("(stopServer) We couldn't find that server");
@@ -213,7 +284,7 @@ async function shutdownServer(serverName) {
     // If there was no error, change server_turned_on to FALSE
     if (response.statusCode === 200) {
       const changeStatus = await pool.query("UPDATE server_configs SET server_turned_on = FALSE WHERE servername = $1", [serverName]);
-      console.log("The server " + serverName + " was turned on.")
+      console.log("The server " + serverName + " was turned off.")
     } else {
       console.error("The server couldn't be turned off.");
       console.error(err);
@@ -251,7 +322,7 @@ async function startServer(serverName) {
     // If there was no error, change server_turned_on to TRUE
     if (response.statusCode === 200) {
       const changeStatus = await pool.query("UPDATE server_configs SET server_turned_on = TRUE WHERE servername = $1", [serverName]);
-      console.log("The server " + serverName + "was turned on.")
+      console.log("The server " + serverName + " was turned on.")
       // Tell the server to start streaming
     } else {
       // There is error "Server is already powered on.", so we shouldn't change server_turned_on to FALSE. But it always has code 7.
@@ -287,6 +358,8 @@ async function getServerId(serverName) {
   return returnVal;
 }
 
+
+// Currently not in use
 function cleanUpString(inputS) {
   // preserve newlines, etc - use valid JSON
   inputS = inputS.replace(/\\n/g, "\\n")  
@@ -302,7 +375,55 @@ function cleanUpString(inputS) {
  return inputS;
 }
 
+// Get Now and One Week Ago as javascript Date objects
+function getTimes() {
+  const now = new Date;
+  let helper = now.getDate() - 7;
+  let oneWeekAgo = new Date;
+  oneWeekAgo.setDate(helper);
+
+  return [now, oneWeekAgo];
+}
+
+// Options for upgradeServer
+// This would work is Kamatera doesn't mind that we pass "index" and "provision" for /cpu and /ram as well
+function upgradeOptions(which, value) {
+  const options = {
+    url: "https://console.kamatera.com/service/server/" + serverID + "/" + which,
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      'AuthClientId': process.env.KAMATERA_AUTH_ID,
+      'AuthSecret': process.env.KAMATERA_AUTH_SECRET
+    },
+    body: JSON.stringify({
+      which: value,
+      "index": 0,
+      "provision": 1
+    })
+  }
+
+  return options;
+}
+
+// Send change request to Kamatera
+function sendChangeRequest(which, value) {
+  request.put(upgradeOptions(which, value), async function(err, response) {
+    console.log("statusCode: ", response.statusCode);
+    console.log("Kamatera: ", response.body);
+    // If there was no error, change server_turned_on to TRUE
+    if (response.statusCode === 200) {
+      console.log("CPU for server " + serverName + " changed to " + cpu);
+    } else {
+      console.error(err);
+      // This return value will be lost
+      return -2;
+    }
+  });
+}
+
 //module.exports = updateServerEntry, refreshServerDatabase, executeServerDatabase;
 exports.updateServerEntry = updateServerEntry;
 exports.refreshServerDatabase = refreshServerDatabase;
 exports.executeServerDatabase = executeServerDatabase;
+exports.terminateAccount = terminateAccount;

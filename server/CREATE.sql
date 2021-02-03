@@ -7,7 +7,8 @@ CREATE TABLE users (
     service_active boolean NOT NULL,
     user_active boolean DEFAULT FALSE,
     activation_hash char (32),
-    paid_until date
+    paid_until date,
+    upgrade_needed boolean DEFAULT FALSE
 );
 
 
@@ -43,4 +44,5 @@ CREATE TABLE server_configs (
     repeat_num numeric,
     server_exists boolean DEFAULT FALSE,
     server_turned_on boolean DEFAULT FALSE
+    server_connected boolean DEFAULT FALSE
 );

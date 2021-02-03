@@ -7,6 +7,7 @@ const authorization = require("../middleware/authorization");
 const nodemailer = require("nodemailer");
 const sha256 = require("crypto-js/sha256");
 const Base64 = require("crypto-js/enc-base64");
+const { terminateAccount } = require("../utils/serverUtils");
 
 // Create admin user
 router.post('/init', async (req,res) => {
@@ -195,6 +196,15 @@ router.get('/get-username', authorization, async (req, res) => {
         res.status(500).json({error: "Server error while in dashboard. \n " + err});
     }
 });
+
+router.delete('/delete-account', authorization, async (req, res) => {
+    try {
+        terminateAccount(req.body.username);
+    } catch (err) {
+        console.error(err.message);
+        res.status.json({error: "Server error in delete-eccount route. \n " + err});
+    }
+})
 
 /** ...  TODO  DELETE USER, CHANGE PW... */
 

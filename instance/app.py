@@ -23,6 +23,10 @@ def instanceSaysHi():
 # Instance will attempt to say Hi to server
 instanceSaysHi()
 
+# Connection keep-alive route
+@app.route('/are-you-here')
+def are_you_still_here():
+  return "yes"
 
 # This is for testing Flask only
 @app.route('/hello')
