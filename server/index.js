@@ -23,6 +23,10 @@ const request = require('request');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });*/
+
+// Task Scheduler
+// ...
+
 app.use(cors());
 app.use(express.json());
 
@@ -31,14 +35,14 @@ app.use(express.json());
 // All the users routes
 app.use('/users', require('./routes/userRoutes'));
 
-
 // PayPal routes
 app.use('/paypal', require('./routes/paypalRoutes'));
-  //test only
-  //app.use('/paypaltest', require('./routes/paypalTest'));
 
 // Instance routes (called from the direction of the instance)
 app.use('/instance', require('./routes/instanceRoutes'));
+
+// Settings routes
+app.use('/settings', require('./routes/settingsRoutes'));
 
 // Test routes
 app.use('/tests', require('./routes/testRoutes'));

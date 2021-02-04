@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer'
 import { setLoginNameField, setPasswordField, LoginRequest } from '../../actions/boardActions';
 
-function Login({dispatch, isLoggedIn, username, shopUsername, password}) {
+function Login({dispatch, username, password}) {
 
   const onChangeNameField = e => {
     dispatch(setLoginNameField(e.target.value));
@@ -67,7 +67,6 @@ function Login({dispatch, isLoggedIn, username, shopUsername, password}) {
 const mapStateToProps = state => ({
   isLoggedIn: state.board.isLoggedIn,
   username: state.board.username,
-  shopUsername: state.shop.username,
   password: state.board.loginPassword
 });
 

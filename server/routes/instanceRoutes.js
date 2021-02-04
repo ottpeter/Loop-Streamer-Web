@@ -24,4 +24,12 @@ router.post('/still-here', async (req, res) => {
   }
 });
 
+// The instance started streaming or an error occured while trying
+router.post('/started-streaming', async (req, res) => {
+  console.log("req.body: ", req.body);
+  if (5 === 5) {
+    // Do something according req.body message
+  }
+})
+
 module.exports = router;

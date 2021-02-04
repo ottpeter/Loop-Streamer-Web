@@ -1,5 +1,5 @@
+import axios from 'axios';
 import { LOGIN, LOGOUT, NEW_UPLOAD, PROGRESS, SET_PASSWORD_FIELD, SET_LOGINNAME_FIELD } from './actionNames';
-import { toast } from 'react-toastify';     //!! MAYBE WE WILL MOVE THIS
 // Server URL is stored in .env
 require('dotenv').config();
 
@@ -98,7 +98,66 @@ export const isAuth = (isAuth) => async (dispatch) => {
   }
 }
 
+// Change 1 setting in server_configs database
+export const changeSetting = (name, value) => (dispatch) => {
+  const settingsObj = { 
+    "settingName": name,
+    "value": value
+  }
+  axios.post('https://63-250-57-43.cloud-xip.io:5000/settings/change', settingsObj, {
+    headers: { "token": localStorage.token }
+  })
+  .then(res => {
+    console.log("Setting changed successfully.", res);
+  }).catch(err => {
+    console.error("There was an error while trying to change a setting: ", err);
+  });
+}
+
 
 /** uploadMedia needs to be revised for multiple server scenario */
+// Upload media (to vids folder or to mp3 folder)
+export const uploadMedia = (file, fileType, id) => (dispatch) => {
+  const formData = new FormData();
+  formData.append('file', file);          // Appending file to form
+  formData.append('fileType', fileType);   // This will be req.body.fileType on the server side
+
+  // We need to generate ID somehow
+  let uploadID = id;
+  dispatch(newUpload(uploadID, file.name, 0, false));
+
+  axios.post('https://185-167-97-209.cloud-xip.io:5000/files/upload', formData, {
+      headers: { "token": localStorage.token },    
+      onUploadProgress: (ProgressEvent) => {
+          let progress = Math.round(
+          ProgressEvent.loaded / ProgressEvent.total * 100) + '%';
+          dispatch(setProgess(uploadID, file.name, progress, false));
+      },
+  }).then(res => {
+      console.log("Upload successful", res);
+      dispatch(setProgess(uploadID, file.name, "100%", true));
+      console.log("res: ", res);
+  }).catch(err => {
+      console.error(err.message);
+  });
+}
 
 /** restartService needs to be revised for multiple server scenario */
+/**
+ * Restart services on the server
+ * @param {command === restartMain}     Restart main service and video service
+ * @param {command === restartVideo}    Restart only video
+ */
+export const restartService = (command) => (dispatch) => {
+  if (command === "restartMain" || command === "restartVideo") {
+      axios.post('https://185-167-97-209.cloud-xip.io:5000/settings/restart', { command: command}, {
+          headers: { "token": localStorage.token }
+      }).then(res => {
+          console.log("success....");
+      }).catch(err => {
+          console.error(err.message);
+      })
+  } else {
+      throw "Invalid command!";
+  }
+}

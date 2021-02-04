@@ -150,3 +150,47 @@
 .form-red {
   background-color: var(--formRed);
 }
+
+.MainBoard {
+  width: 50%;
+}
+.MainBoardMessages {
+  width: 50%;
+}
+
+.btn-upload {
+  width: 200px;
+  padding: 30px;
+  height: 50px;
+  background-color: deeppink;
+}
+
+.btn-switch-page {
+  width: 200px;
+  padding: 30px;
+  height: 50px;
+  background-color: #ff319f;
+}
+.btn-danger {
+  text-decoration: none;
+  border: none;
+  display: inline-block;
+  width: 200px;
+  padding: 30px;
+  height: 50px;
+  background-color: red;
+}
+
+/* Progress Bars*/
+.progressContainer {
+  width: 100%;
+  background-color: #0D0208;
+  border-radius: 10px;
+}
+
+.progressBar {
+  width: 0%;
+  border-radius: 10px;
+  height: 30px;
+  background-color: #7bff00;
+}

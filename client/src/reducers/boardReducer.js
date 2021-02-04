@@ -5,6 +5,8 @@ const initialState = {
   serverError: false,
   username: "_not_set_",
   loginPassword: null,
+  uploads: [],
+  arrayLength: 0,
 }
 
 const boardReducer = function (state = initialState, action) {

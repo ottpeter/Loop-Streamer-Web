@@ -18,3 +18,6 @@ module.exports = router;
 //   [pay]
 //   UPDATE server_configs SET servername='loop-streamer' WHERE username='loopstreamer';
 //   UPDATE server_configs SET server_exists=TRUE WHERE username='loopstreamer';
+//
+//  Set server to turned off in db
+//   UPDATE server_configs SET server_turned_on=FALSE WHERE username='loopstreamer';
