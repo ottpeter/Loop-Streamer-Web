@@ -11,8 +11,8 @@ function Account(props) {
         <div className="AccountBoard">
             <h1>Account Board</h1>
             <div className="AccountBoard">
-                <button>Change password</button>
-                <button>Delete account</button>
+                <button className="btn-warning">Change password</button>
+                <button className="btn-danger">Delete account</button>
                 {props.username === "admin" ? (
                   <button>Reset password for user</button>
                   ) : (

@@ -11,6 +11,7 @@ export const SELECT_SETTING = "SELECT_SETTING";
 export const CHANGE_SETTING_VALUE = "CHANGE_SETTING_VALUE";
 export const OPEN_TEXT_MODAL = "OPEN_TEXT_MODAL";
 export const CLOSE_TEXT_MODAL = "CLOSE_TEXT_MODAL";
+export const SET_INSTANCE_IP = "SET_INSTANCE_IP";
 
 
 // The file upload should happen to the server instance

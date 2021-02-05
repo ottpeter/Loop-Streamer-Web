@@ -1,10 +1,11 @@
-import { INIT, LOGIN, LOGOUT, SET_LOGINNAME_FIELD, SET_PASSWORD_FIELD, CHANGE_SETTING_TEXTS, OPEN_TEXT_MODAL, CLOSE_TEXT_MODAL, SELECT_SETTING, CHANGE_SETTING_VALUE } from '../actions/actionNames';
+import { INIT, LOGIN, LOGOUT, SET_LOGINNAME_FIELD, SET_PASSWORD_FIELD, CHANGE_SETTING_TEXTS, OPEN_TEXT_MODAL, CLOSE_TEXT_MODAL, SELECT_SETTING, CHANGE_SETTING_VALUE, SET_INSTANCE_IP } from '../actions/actionNames';
 
 const initialState = {
   isLoggedIn: false,
   serverError: false,
   username: "_not_set_",
   loginPassword: null,
+  instanceIP: null,
   uploads: [],
   arrayLength: 0,
   modalTitleID: "init_title",
@@ -79,6 +80,11 @@ const boardReducer = function (state = initialState, action) {
       return {
         ...state,
         settingValue: action.payload.settingValue
+      }
+    case SET_INSTANCE_IP:
+      return {
+        ...state,
+        instanceIP: action.payload.ip
       }
 
     default:

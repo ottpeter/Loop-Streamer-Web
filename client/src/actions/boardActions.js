@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOGIN, LOGOUT, NEW_UPLOAD, PROGRESS, SET_PASSWORD_FIELD, SET_LOGINNAME_FIELD, CHANGE_SETTING_TEXTS, OPEN_TEXT_MODAL, CHANGE_SETTING_VALUE, SELECT_SETTING } from './actionNames';
+import { LOGIN, LOGOUT, NEW_UPLOAD, PROGRESS, SET_PASSWORD_FIELD, SET_LOGINNAME_FIELD, CHANGE_SETTING_TEXTS, OPEN_TEXT_MODAL, CHANGE_SETTING_VALUE, SELECT_SETTING, SET_INSTANCE_IP } from './actionNames';
 // Server URL is stored in .env
 require('dotenv').config();
 
@@ -103,6 +103,14 @@ export const changeSettingValue = (value) => ({
   }
 });
 
+// Set instance IP
+export const setIP = (ip) => ({
+  type: SET_INSTANCE_IP,
+  payload: {
+    ip: ip
+  }
+});
+
 // Get username from JWT token or LOGOUT if not authenticated
 export const isAuth = (isAuth) => async (dispatch) => {
   try {
@@ -157,7 +165,7 @@ export const startTextModal = (settingName) => async (dispatch) => {
 // Change 1 setting in server_configs database
 export const changeSetting = (name, value) => (dispatch) => {
   const settingsObj = { 
-    "settingName": name,
+    "name": name,
     "value": value
   }
   axios.post('https://63-250-57-43.cloud-xip.io:5000/settings/change', settingsObj, {
@@ -168,6 +176,17 @@ export const changeSetting = (name, value) => (dispatch) => {
   }).catch(err => {
     console.error("There was an error while trying to change a setting: ", err);
   });
+}
+
+// Get the IP of the instance
+export const getInstanceIP = () => (dispatch) => {
+  axios.get('https://63-250-57-43.cloud-xip.io:5000/settings/get-instance-ip', {
+    headers: { "token": localStorage.token }
+  }).then(res => {
+    dispatch(setIP(res.data.ip));
+  }).catch(err => {
+    console.error("There was an error during the fetching of the IP: ", err)
+  })
 }
 
 

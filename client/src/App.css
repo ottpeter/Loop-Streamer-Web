@@ -17,6 +17,10 @@
   --boardHover: #AA0000;
   --boardHoverBackground: #EEEEEE;
   --boardWhite: #EEEEEE;
+  --boardDanger: #ff0000;
+  --boardWarning: #ffff00;
+  --uploadButton: #cc00cc;
+  --boardSwitch: #220022;
 }
 
 /*html,body {
@@ -154,22 +158,26 @@
 .MainBoard {
   width: 50%;
 }
+.MainBoardButtons {
+  display: flex;
+  flex-direction: column;
+}
 .MainBoardMessages {
   width: 50%;
 }
 
 .btn-upload {
-  width: 200px;
+  width: 250px;
   padding: 30px;
   height: 50px;
-  background-color: deeppink;
+  background-color: var(--uploadButton);
 }
 
 .btn-switch-page {
-  width: 200px;
+  width: 250px;
   padding: 30px;
   height: 50px;
-  background-color: #ff319f;
+  background-color: var(--boardSwitch);
 }
 .btn-danger {
   text-decoration: none;
@@ -178,7 +186,16 @@
   width: 200px;
   padding: 30px;
   height: 50px;
-  background-color: red;
+  background-color: var(--boardDanger);
+}
+.btn-warning {
+  text-decoration: none;
+  border: none;
+  display: inline-block;
+  width: 200px;
+  padding: 30px;
+  height: 50px;
+  background-color: var(--boardWarning);
 }
 
 /* Progress Bars*/

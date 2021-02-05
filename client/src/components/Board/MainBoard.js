@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { useEffect, useState } from 'react';
 import { LOGOUT } from '../../actions/actionNames';
-import { uploadMedia, restartService } from '../../actions/boardActions';
+import { uploadMedia, restartService, getInstanceIP } from '../../actions/boardActions';
 import { useHistory, Link } from 'react-router-dom';
 
 function MainBoard({selectedProduct, dispatch, ongoingUploads, nextID}) {
@@ -17,6 +17,7 @@ function MainBoard({selectedProduct, dispatch, ongoingUploads, nextID}) {
     // Redirect to checkout if there is purchase in progress
     console.log("Redirecting to checkout...");
     if (selectedProduct !== "empty") history.push('/checkout');
+    dispatch(getInstanceIP());
     // This is necessary to refresh periodically
     const interval = setInterval(() => {
       setSeconds(seconds => seconds + 1);
@@ -84,7 +85,7 @@ function MainBoard({selectedProduct, dispatch, ongoingUploads, nextID}) {
         
             <Link to="/board/settings" className="btn-switch-page">Application settings</Link>
             <Link to="/board/account" className="btn-switch-page">Account settings</Link>
-            <button onClick={() => restartMain()}>RESTART MAIN</button>
+            <button onClick={() => restartMain()} className="btn-warning">RESTART MAIN</button>
             <button onClick={() => logOut()} className="btn-danger">Logout</button>
         </div>
 
