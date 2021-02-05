@@ -138,6 +138,16 @@ export const startTextModal = (settingName) => async (dispatch) => {
       dispatch(selectSetting("logo-position"));
       dispatch({type: OPEN_TEXT_MODAL});
       break;
+    case "logo-size":
+      dispatch(changeSettingTexts("set_logo-size_title", "Set Logo Size", "set_logo-size_text", "Set the size of the logo", "pixels"));
+      dispatch(selectSetting("logo-size"));
+      dispatch({type: OPEN_TEXT_MODAL});
+      break;
+    case "slideshow-duration":
+      dispatch(changeSettingTexts("set_slideshow-duration_title", "Set Slideshow Duration", "Set the duration for the image images that are mixed into the videos.", "seconds"));
+      dispatch(selectSetting("slideshow-duration"));
+      dispatch({type: OPEN_TEXT_MODAL});
+      break;
 
     default:
       return;

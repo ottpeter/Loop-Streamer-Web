@@ -24,9 +24,9 @@ function Settings({showTextModal, dispatch}) {
           <div className="SettingsButtons">
               <button className="btn-settings" onClick={() => dispatch(startTextModal("rtmp"))}>Set RTMP key</button>
               <button className="btn-settings">Upload Logo</button>
-              <button className="btn-settings" onClick={() => dispatch(startTextModal("logo-position"))}>Change logo position</button>
-              <button className="btn-settings">Change logo size</button>
-              <button className="btn-settings">Change image slideshow duration</button>
+              <button className="btn-settings" onClick={() => dispatch(startTextModal("logo-position"))} >Change logo position</button>
+              <button className="btn-settings" onClick={() => dispatch(startTextModal("logo-size"))} >Change logo size</button>
+              <button className="btn-settings" onClick={() => dispatch(startTextModal("slideshow-duration")) }>Change image slideshow duration</button>
               <button className="btn-settings">Change font</button>
               <button className="btn-settings">Change color</button>
               <Link to="/" className="btn-switch-page">Back to Main Board</Link>
@@ -43,3 +43,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Settings);
+
+
+// REVERSE ORDER COLOURS!!
