@@ -1,4 +1,4 @@
-import { INIT, LOGIN, LOGOUT, SET_LOGINNAME_FIELD, SET_PASSWORD_FIELD } from '../actions/actionNames';
+import { INIT, LOGIN, LOGOUT, SET_LOGINNAME_FIELD, SET_PASSWORD_FIELD, CHANGE_SETTING_TEXTS, OPEN_TEXT_MODAL, CLOSE_TEXT_MODAL, SELECT_SETTING, CHANGE_SETTING_VALUE } from '../actions/actionNames';
 
 const initialState = {
   isLoggedIn: false,
@@ -7,6 +7,15 @@ const initialState = {
   loginPassword: null,
   uploads: [],
   arrayLength: 0,
+  modalTitleID: "init_title",
+  modalTitle: "Init Title",
+  modalTextID: "init_text",
+  modalText: "Initial text before change",
+  modalPrefix: null,
+  textModalOpen: false,
+  xyzModalOpen: false,
+  settingName: null,
+  settingValue: null
 }
 
 const boardReducer = function (state = initialState, action) {
@@ -40,6 +49,36 @@ const boardReducer = function (state = initialState, action) {
         ...state,
         loginPassword: null,
         isLoggedIn: false,
+      }
+    
+    case CHANGE_SETTING_TEXTS:
+      return {
+        ...state,
+        modalTitleID: action.payload.modalTitleID,
+        modalTitle: action.payload.modalTitle,
+        modalTextID: action.payload.modalTextID,
+        modalText: action.payload.modalText,
+        modalPrefix: action.payload.modalPrefix
+      }
+    case OPEN_TEXT_MODAL:
+      return {
+        ...state,
+        textModalOpen: true
+      }
+    case CLOSE_TEXT_MODAL:
+      return {
+        ...state,
+        textModalOpen: false
+      }
+    case SELECT_SETTING:
+      return {
+        ...state,
+        settingName: action.payload.settingName
+      }
+    case CHANGE_SETTING_VALUE:
+      return {
+        ...state,
+        settingValue: action.payload.settingValue
       }
 
     default:

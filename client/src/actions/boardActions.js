@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOGIN, LOGOUT, NEW_UPLOAD, PROGRESS, SET_PASSWORD_FIELD, SET_LOGINNAME_FIELD } from './actionNames';
+import { LOGIN, LOGOUT, NEW_UPLOAD, PROGRESS, SET_PASSWORD_FIELD, SET_LOGINNAME_FIELD, CHANGE_SETTING_TEXTS, OPEN_TEXT_MODAL, CHANGE_SETTING_VALUE, SELECT_SETTING } from './actionNames';
 // Server URL is stored in .env
 require('dotenv').config();
 
@@ -75,6 +75,33 @@ export const setProgess = (id, filename, progress, done) => ({
   }
 });
 
+// Change texts for the setting modal (TextModal)
+export const changeSettingTexts = (titleId, titleText, messageId, messageText, prefix) => ({
+  type: CHANGE_SETTING_TEXTS,
+  payload: {
+    modalTitleID: titleId,
+    modalTitle: titleText,
+    modalTextID: messageId,
+    modalText: messageText,
+    modalPrefix: prefix
+  }
+});
+
+// Select which setting is being modified
+export const selectSetting = (settingName) => ({
+  type: SELECT_SETTING,
+  payload: {
+    settingName: settingName
+  }
+});
+
+// Change setting value (for selected setting)
+export const changeSettingValue = (value) => ({
+  type: CHANGE_SETTING_VALUE,
+  payload: {
+    settingValue: value
+  }
+});
 
 // Get username from JWT token or LOGOUT if not authenticated
 export const isAuth = (isAuth) => async (dispatch) => {
@@ -95,6 +122,25 @@ export const isAuth = (isAuth) => async (dispatch) => {
           dispatch({type: LOGOUT}); 
   } catch (err) {
       console.error(err.message);
+  }
+}
+
+// Open the text modal for a given setting
+export const startTextModal = (settingName) => async (dispatch) => {
+  switch (settingName) {
+    case "rtmp":
+      dispatch(changeSettingTexts("set_rtmp-key_title","Set RTMP-key", "set_rtmp-key_text","Set the RTMP key","rtmp://"));
+      dispatch(selectSetting("rtmp-key"));
+      dispatch({type: OPEN_TEXT_MODAL});
+      break;
+    case "logo-position":
+      dispatch(changeSettingTexts("set_logo-position_title", "Set Logo Position", "set_logo-position_text", "Set logo position from the right", "pixels"));
+      dispatch(selectSetting("logo-position"));
+      dispatch({type: OPEN_TEXT_MODAL});
+      break;
+
+    default:
+      return;
   }
 }
 

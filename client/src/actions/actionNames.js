@@ -6,6 +6,11 @@ export const DELETE_USER = "DELETE_USER";       // User can request account dele
 export const CHANGE_PWD = "CHANGE_PASSWORD";
 export const SET_LOGINNAME_FIELD = "SET_LOGINNAME_FIELD";
 export const SET_PASSWORD_FIELD = "SET_PASSWORD_FIELD";
+export const CHANGE_SETTING_TEXTS = "CHANGE_SETTING_TEXTS";
+export const SELECT_SETTING = "SELECT_SETTING";
+export const CHANGE_SETTING_VALUE = "CHANGE_SETTING_VALUE";
+export const OPEN_TEXT_MODAL = "OPEN_TEXT_MODAL";
+export const CLOSE_TEXT_MODAL = "CLOSE_TEXT_MODAL";
 
 
 // The file upload should happen to the server instance
