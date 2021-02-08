@@ -267,7 +267,7 @@ async function shutdownServer(serverName) {
     console.error("(stopServer) We couldn't find that server");
     return -1;
   }
-  // Credentials and server configs
+  // Credentials and server configs METHOD!!
   const serverOptions = {
     url: "https://console.kamatera.com/service/server/" + serverID + "/power",
     method: 'POST',

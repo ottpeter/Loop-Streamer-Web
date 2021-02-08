@@ -1,3 +1,4 @@
+from flask import request
 import subprocess
 import requests
 
@@ -29,3 +30,20 @@ def startStreaming():
     "startedStreaming": result
   }
   requests.post(url, json=reqBody, verify=False)
+
+
+def processConfig():
+  try:
+    print("Processing config object...")
+    data = request.json
+    with open('test.config', 'a') as file:
+      for name in data:
+        file.write(name)
+        file.write("=")
+        file.write(str(data[name]))
+        file.write("\n")
+    file.close()
+    print("Done!")
+    return True
+  except:
+    return False

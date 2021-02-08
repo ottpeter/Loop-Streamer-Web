@@ -1,9 +1,15 @@
+const { copyConfig } = require("../utils/instanceUtils");
 const { executeServerDatabase } = require("../utils/serverUtils");
 const router = require("express").Router();
 
 router.get('/executedb', async (req, res) => {
   console.log("Execute server_configs database test route...");
   executeServerDatabase();
+})
+
+router.get('/copyconfig', async (req, res) => {
+  console.log("Running copyConfig()...");
+  copyConfig("loopstreamer");
 })
 
 module.exports = router;

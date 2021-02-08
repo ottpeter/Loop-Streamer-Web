@@ -43,6 +43,7 @@ CREATE TABLE server_configs (
     mp3_path varchar (256),
     repeat_num numeric,
     server_exists boolean DEFAULT FALSE,
-    server_turned_on boolean DEFAULT FALSE
-    server_connected boolean DEFAULT FALSE
+    server_turned_on boolean DEFAULT FALSE,
+    server_connected boolean DEFAULT FALSE,
+    server_ip varchar (24) DEFAULT null
 );

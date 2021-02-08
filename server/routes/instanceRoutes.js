@@ -2,6 +2,7 @@
 const router = require("express").Router();
 const request = require("request");
 const pool = require("../db");
+const { getIpFromString } = require("../utils/ipUtils");
 
 
 // Welcome route
@@ -10,7 +11,7 @@ router.post('/welcome', async (req, res) => {
   if (req.body.hasOwnProperty("hi") && req.body.hasOwnProperty("name")) {
     res.json({"welcome": req.body.name})
     // Change 'server_connected' to TRUE in db
-    const connected = await pool.query("UPDATE server_configs SET server_connected=TRUE WHERE servername = $1", [req.body.name]);
+    const connected = await pool.query("UPDATE server_configs SET (server_connected, server_ip) = (TRUE, $1) WHERE servername = $2", [getIpFromString(req.ip), req.body.name]);
   }
 });
 
